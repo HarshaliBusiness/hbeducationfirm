@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HB Educational Firm</title>
+    <link rel="icon" href="/assets/logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Glacial+Indifference:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/privacyPolicy.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">HB <span>Educational</span>Firm</a>
+            <button class="logout-btn" id="back_to_pcm">Back</button>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu-btn" onclick="closeMobileMenu()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="auth-buttons">
+            <button class="btn btn-outline" onclick="openLoginModal()">Login</button>
+            <button class="btn btn-primary" onclick="openRegisterModal()">Register</button>
+        </div>
+    </div>
+    <div class="overlay" id="overlay" onclick="closeMobileMenu()"></div>
+
+    <main class="privacy-container">
+        <div class="privacy-header">
+            <h1>Privacy Policy</h1>
+            <!-- <p>Effective Date: 1st January 2025</p> -->
+        </div>
+
+        <div class="privacy-content">
+            <div class="privacy-section">
+                <p>At EduPath, your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you use our website and services, specifically related to admission counseling for Engineering, Pharmacy, BBA, BMS, BCA, NEET, and Medical courses.</p>
+                <p>By using our website, you agree to the terms of this Privacy Policy.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h2>1. Eligibility</h2>
+                <p>Our services are intended for individuals those who have completed Class 12 (HSC or equivalent). By using our website, you confirm that you meet this requirement.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h2>2. Information We Collect</h2>
+                
+                <h3>2.1 Personal Information</h3>
+                <p>We may collect the following data when you interact with our website:</p>
+                <ul>
+                    <li>Full Name</li>
+                    <li>Email Address</li>
+                    <li>Phone Number</li>
+                    <li>Academic Information (Stream, Board, Rank, Percentile, etc.)</li>
+                    <li>Payment Information (processed via third-party gateways)</li>
+                    <li>IP Address and Device Info</li>
+                </ul>
+                
+                <h3>2.2 Non-Personal Information</h3>
+                <ul>
+                    <li>Browser type and version</li>
+                    <li>Pages visited</li>
+                    <li>Time and date of visit</li>
+                    <li>Referral links</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section">
+                <h2>3. How We Use Your Information</h2>
+                <p>We use your data to:</p>
+                <ul>
+                    <li>Provide personalized counseling and admission guidance</li>
+                    <li>Deliver college preference lists</li>
+                    <li>Communicate updates, services, or changes</li>
+                    <li>Process payments for digital products</li>
+                    <li>Respond to inquiries and support requests</li>
+                    <li>Improve website functionality and user experience</li>
+                    <li>Send relevant offers, only if you opt in</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section">
+                <h2>4. Payment and Financial Data</h2>
+                <ul>
+                    <li>We use secure third-party payment gateways like Razorpay, Stripe, or PayPal.</li>
+                    <li>We do not store credit/debit card details on our servers.</li>
+                    <li>Transactions are encrypted and follow PCI-DSS compliance.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section">
+                <h2>5. Data Sharing and Disclosure</h2>
+                <p>We do not sell or rent your personal information. However, we may share it:</p>
+                <ul>
+                    <li>With payment processors for completing transactions</li>
+                    <li>With academic counselors who assist in delivering our services</li>
+                    <li>If required by law, government, or regulatory authorities</li>
+                </ul>
+                <p>All third parties are under strict confidentiality agreements.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h2>6. Data Security</h2>
+                <ul>
+                    <li>We use SSL encryption and secure storage practices.</li>
+                    <li>Your data is stored on servers with restricted access.</li>
+                    <li>Despite these efforts, no digital platform is completely secure. You accept this inherent risk by using our site.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section">
+                <h2>7. Your Rights</h2>
+                <p>You have the right to:</p>
+                <ul>
+                    <li>Access your personal data</li>
+                    <li>Correct or update inaccurate information</li>
+                    <li>Request deletion of your data</li>
+                    <li>Opt out of promotional communications</li>
+                    <li>Transfer your data (data portability, if applicable)</li>
+                </ul>
+                <p>To exercise any of these rights, email us at: support@edupath.com</p>
+            </div>
+
+            <!-- <div class="privacy-section">
+                <h2>8. Cookies and Tracking</h2>
+                <p>We use cookies to:</p>
+                <ul>
+                    <li>Remember user preferences</li>
+                    <li>Monitor traffic and usage</li>
+                    <li>Improve performance</li>
+                </ul>
+                <p>You can disable cookies through your browser settings. However, this may impact website functionality.</p>
+            </div> -->
+
+            <div class="privacy-section">
+                <h2>8. Third-Party Links</h2>
+                <p>Our website may include links to third-party websites. We are not responsible for their privacy practices. Please review their respective privacy policies before sharing data.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h2>9. Children's Privacy</h2>
+                <p>Our platform is not intended for children under 13. We do not knowingly collect data from minors. If such data is identified, we will delete it immediately.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h2>10. Policy Changes</h2>
+                <p>We may revise this Privacy Policy periodically. Updates will be posted on this page with a new Effective Date. Continued use of our site implies acceptance of the updated policy.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h2>11. Contact Us</h2>
+                <p>If you have any questions or concerns, please contact:</p>
+                <ul>
+                    <li>Email: support@edupath.com</li>
+                    <li>Phone: +91-XXXXXXXXXX</li>
+                    <!-- <li>Address: Office No. 12, XYZ Complex, Pune, Maharashtra, India – 411001</li> -->
+                </ul>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>12. Governing Law</h2>
+                <p>This Privacy Policy is governed by the laws of India, under the Information Technology Act, 2000, and related rules.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="social-links">
+            <!-- <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a> -->
+            <a href="https://www.instagram.com/harshali_bhandari_2430/"><i class="fab fa-instagram"></i></a>
+            <!-- <a href="#"><i class="fab fa-linkedin"></i></a> -->
+            <a href="https://www.youtube.com/@HB_Educational_Firm"><i class="fab fa-youtube"></i></a>
+        </div>
+        
+        <p class="copyright">© 2025 EduPath. All rights reserved.</p>
+    </footer>
+
+    <script src="js/privacyPolicy.js"></script>
+</body>
+</html>
