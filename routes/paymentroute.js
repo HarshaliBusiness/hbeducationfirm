@@ -10,7 +10,8 @@ router.get('/', isLoggedIn,async (req,res)=>{
 
         if(req.session.user.promoCode != ''){
             const promo_code = req.session.user.promoCode;
-            const pm = await User.findOne({code : promo_code});
+            const pm = await promoCode.findOne({code : promo_code});
+            // console.log(pm)
             if(pm.count == 0){
                 return res.json({isOk: false, msg: 'Promocode limit is over'});
             }

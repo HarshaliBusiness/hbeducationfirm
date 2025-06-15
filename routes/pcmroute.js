@@ -118,7 +118,7 @@ router.post('/checkCode', async (req,res)=>{
   try {
 
     const {promo_code} = req.body;
-    console.log(promo_code);
+    // console.log(promo_code);
     
     const code = await promoCode.findOne({ code : promo_code});
     if(!code){
@@ -127,7 +127,7 @@ router.post('/checkCode', async (req,res)=>{
       return res.json({msg : 'Code limit is over.', iserr : true})
     }else{
       req.session.user.promoCode = promo_code;
-      console.log(req.session.user);
+      // console.log(req.session.user);
       return res.json({msg:'Sucssesfully updated.',iserr: false})
     }
   } catch (error) {
