@@ -217,9 +217,10 @@ document.getElementById('branchCutoffs').addEventListener('click',()=>{
     window.location.href = '/pcm/branchCutoffs';
 });
 
-document.getElementById('percentilePredictor').addEventListener('click',()=>{
-    window.location.href = '/pcm/percentilePredictor';
-});
+// document.getElementById('percentilePredictor').addEventListener('click',()=>{
+//     window.location.href = '/pcm/percentilePredictor';
+// });
+
 
 document.getElementById('topCollgesPCM').addEventListener('click',()=>{
     window.location.href = '/pcm/topCollegePCM';
