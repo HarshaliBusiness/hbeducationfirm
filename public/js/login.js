@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // DOM Elements
     const loginForm = document.getElementById('loginForm');
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-    const otpSection = document.getElementById('otpSection');
+    // const otpSection = document.getElementById('otpSection');
     const resetPasswordForm = document.getElementById('resetPasswordForm');
     const statusMessage = document.getElementById('statusMessage');
     const phoneDisplay = document.getElementById('phoneDisplay');
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     backToLoginBtn.addEventListener('click', function() {
         forgotPasswordForm.style.display = 'none';
-        otpSection.style.display = 'none';
+        // otpSection.style.display = 'none';
         resetPasswordForm.style.display = 'none';
         loginForm.style.display = 'flex';
         clearStatus();

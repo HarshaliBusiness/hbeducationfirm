@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const result = await response.json();
             if(result.verification == true){
-                window.location.href = `/afterLoginPage`;
+                window.location.href = `/login`;
             }else{
                 showStatus(result.msg, 'error');
             }

@@ -1031,8 +1031,8 @@ async function getColleges(formData) {
 
     let table_name = `cap_${formData.round}`;
 
-    console.log("Generated SQL:", caste_column);
-    console.log("caste condition", caste_condition);
+    // console.log("Generated SQL:", caste_column);
+    // console.log("caste condition", caste_condition);
 
     try {
         const { data, error } = await supabase.rpc('get_branch_choices', {
