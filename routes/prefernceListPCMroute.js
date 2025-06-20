@@ -63,19 +63,6 @@ router.get('/fetchUniversity', async (req, res) => {
     }
 });
 
-function customRound(value) {
-    if (value >= 99.6) return 100;
-    const intPart = Math.floor(value);
-    const decimal = value - intPart;
-
-    if (decimal > 0 && decimal <= 0.4) {
-        return intPart + 0.5;
-    } else if (decimal > 0.4) {
-        return intPart + 1;
-    } else {
-        return value;
-    }
-}
 
 
 async function getSelectedBranchCode(selected_branches) {
@@ -94,19 +81,44 @@ async function getSelectedBranchCode(selected_branches) {
 }
 
 function calculateRankRange(formData) {
-    let minRank = formData.generalRank - 15000;
+
+    let subMinRank = 0;
+
+    let minRank = formData.generalRank;
 
     if (formData.generalRank < 4000) {
-        minRank = 0;
+        subMinRank = 0;
+    }else if(formData.generalRank < 20000){
+        subMinRank = 4000;
+    }else if(formData.generalRank < 30000){
+        subMinRank = 4500;
+    }else if(formData.generalRank < 40000){
+        subMinRank = 5000;
+    }else if(formData.generalRank < 50000){
+        subMinRank = 5500;
+    }else if(formData.generalRank < 60000){
+        subMinRank = 6000;
+    }else if(formData.generalRank < 70000){
+        subMinRank = 7000;
+    }else if(formData.generalRank < 80000){
+        subMinRank = 8000;
+    }else if(formData.generalRank < 90000){
+        subMinRank = 9000;
+    }else if(formData.generalRank < 100000){
+        subMinRank = 10000;
+    }else {
+        subMinRank = 11000;
     }
+    
 
+    minRank -= subMinRank;
     new_data_of_student.minRank = minRank;
     new_data_of_student.maxRank = 2000000;
 
-    minRank = formData.allIndiaRank - 6000;
+    minRank = formData.allIndiaRank - 3000;
 
 
-    if (formData.allIndiaRank < 2000) {
+    if (formData.allIndiaRank < 3000) {
         minRank = 0;
     }
     new_data_of_student.allMinRank = minRank;

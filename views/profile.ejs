@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HB Educational Firm - Profile</title>
+    <link rel="icon" href="/assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">HB <span>Educational Firm</span></a>
+            <div class="auth-buttons desktop">
+                <button class="btn btn-outline" id="back-btn"> Back</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobile-back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Profile Page Content -->
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h1 class="profile-title" id="profileTitle"></h1>
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <div class="profile-field">
+                    <label for="name">Full Name</label>
+                    <div class="field-value">
+                        <span id="name-value">John Doe</span>
+                        <!-- <button class="edit-btn" data-field="name"><i class="fas fa-edit"></i></button> -->
+                    </div>
+                    <!-- <div class="edit-field" style="display: none;">
+                        <input type="text" id="name-input" value="John Doe">
+                        <div class="action-buttons">
+                            <button class="save-btn" data-field="name">Save</button>
+                            <button class="cancel-btn" data-field="name">Cancel</button>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="profile-field">
+                    <label for="phone">Phone Number</label>
+                    <div class="field-value">
+                        <span id="phone-value">+1 234 567 890</span>
+                        <!-- <button class="edit-btn" data-field="phone"><i class="fas fa-edit"></i></button> -->
+                    </div>
+                    <!-- <div class="edit-field" style="display: none;">
+                        <input type="text" id="phone-input" value="+1 234 567 890">
+                        <div class="action-buttons">
+                            <button class="save-btn" data-field="phone">Save</button>
+                            <button class="cancel-btn" data-field="phone">Cancel</button>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="profile-field">
+                    <label for="email">Email Address</label>
+                    <div class="field-value">
+                        <span id="email-value">john.doe@example.com</span>
+                        <!-- <button class="edit-btn" data-field="email"><i class="fas fa-edit"></i></button> -->
+                    </div>
+                    <!-- <div class="edit-field" style="display: none;">
+                        <input type="email" id="email-input" value="john.doe@example.com">
+                        <div class="action-buttons">
+                            <button class="save-btn" data-field="email">Save</button>
+                            <button class="cancel-btn" data-field="email">Cancel</button>
+                        </div>
+                    </div> -->
+                </div>
+                
+                <div class="promo-section" id="promoSection">
+                    <h3>My Promo Code</h3>
+                    <!-- <div class="promo_div"><p>Expire</p> <p>Expire</p></div> -->
+                     
+                </div>
+            </div>
+
+            <div class="downloads-section" id="downloads_section">
+                <h3>My Preference List</h3>
+                <div class="downloads-list" id="downloadsList">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Popup -->
+    <div id="error-popup" class="error-popup">
+        <div class="error-popup-content">
+            <span class="close-error-popup">&times;</span>
+            <p id="error-message"></p>
+        </div>
+    </div>
+
+    <script src="/js/profile.js"></script>
+</body>
+</html>

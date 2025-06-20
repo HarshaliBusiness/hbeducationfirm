@@ -107,6 +107,9 @@ app.use('/privacyPolicy',privacyPolicyRoutes);
 const adminPanelRoutes = require('./routes/adminnPanelroute'); 
 app.use('/adminPanel',adminPanelRoutes);
 
+const profileRoutes = require('./routes/profileroute'); 
+app.use('/profile',profileRoutes);
+
 app.listen(port,()=>{
     console.log('server listing at port 8080');
 })
