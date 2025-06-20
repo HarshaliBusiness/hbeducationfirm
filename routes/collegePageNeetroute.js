@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const {db, supabase} = require('../database/db');
+const isLoggedIn = require('../middleware/auth');
 
-router.get('/:id',async(req,res)=>{
+router.get('/:id',isLoggedIn,async(req,res)=>{
   const {id} = req.params;
   // console.log(id)
   if (req.session.user) {
