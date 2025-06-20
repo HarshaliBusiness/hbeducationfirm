@@ -1062,7 +1062,8 @@ function college_filter_by_city(colleges, city) {
 }
 
 function college_filter_by_branch_category(colleges, branch_cat) {
-    return colleges.filter(element => element.branch_category == branch_cat);
+    // return colleges.filter(element => element.branch_category == branch_cat);
+    return colleges.filter(element => branch_cat.includes(element.branch_category));
 }
 
 function college_fillter_by_selected_branch(colleges, selected_branches) {
@@ -1076,7 +1077,7 @@ function college_filter(colleges, formData) {
     
     if (formData.selected_branches.length == 0) {
         if (formData.branchCategories[0] != 'All') {
-            colleges = college_filter_by_branch_category(colleges, formData.branchCategory);
+            colleges = college_filter_by_branch_category(colleges, formData.branchCategories);
         }
     } else {
         colleges = college_fillter_by_selected_branch(colleges, formData.selected_branches);
@@ -1132,6 +1133,7 @@ router.post('/College_list', async (req, res) => {
         }
 
         colleges = colleges.slice(0,college_counts);
+        // console.log(colleges);
         res.json(colleges);
     } catch (error) {
         console.log(error);
