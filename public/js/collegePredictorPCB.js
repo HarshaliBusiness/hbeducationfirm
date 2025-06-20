@@ -15,7 +15,7 @@ const collegeCardsContainer = document.getElementById('collegeCards');
 const selectedCountElement = document.getElementById('selectedCount');
 const regionCheckboxGroup = document.getElementById('regionCheckboxGroup');
 const roundSelect = document.getElementById('round');
-const homeuniversitySelect = document.getElementById('homeUniversity');
+// const homeuniversitySelect = document.getElementById('homeUniversity');
 // const customBranchBtn = document.getElementById('customBranchBtn');
 // const branchSelect = document.getElementById('branch');
 const selectedBranchesContainer = document.getElementById('selectedBranchesContainer');
@@ -44,7 +44,7 @@ function handleFormSubmit(e) {
         specialReservation: document.getElementById('specialReservation').value,
         branchCategory: branchCategorySelect.value,
         city: finalRegions,
-        homeuniversity: homeuniversitySelect.value
+        homeuniversity: 'Sant Gadge Baba Amravati University'
     };
     // console.log('Form Data:', formData);
     generateCollegeList(formData);
@@ -115,7 +115,7 @@ function createCollegeCard(college, formData) {
     let card_content = `
         <div class="college-card-header">
             <div class="college-code">${college.choice_code}</div>
-            <div class="college-code">Seat type: ${college.seat_type}</div>
+            
             <input type="checkbox" checked class="card-checkbox">
         </div>
         <div class="college-name">${college.college_name}</div>
@@ -211,7 +211,6 @@ document.addEventListener("DOMContentLoaded", initialize());
 
 async function initialize() {
     await fetchCity();
-    await fetchUniversity();
 }
 
 
@@ -246,22 +245,3 @@ async function fetchCity() {
     }
 }
 
-// Home university
-async function fetchUniversity() {
-    try {
-        const response = await fetch('/pcb/fetchUniversity');
-        const data = await response.json();
-
-        homeuniversitySelect.innerHTML = `<option value="" disabled selected>Select your home university</option>`;
-
-        data.forEach(element => {
-            const option = document.createElement('option');
-            option.value = `${element.university}`;
-            option.innerHTML = `${element.university}`;
-            homeuniversitySelect.appendChild(option);
-        });
-
-    } catch (error) {
-        console.log(error);
-    }
-}

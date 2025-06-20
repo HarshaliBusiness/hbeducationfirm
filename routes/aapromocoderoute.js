@@ -28,14 +28,15 @@ router.get('/',async (req,res)=>{
   try {
 
     const promoCodePromises = [];
-    for (let i = 0; i < 60; i++) {
+    const code_counts = 10;
+    for (let i = 0; i < code_counts; i++) {
       const code = generatePromoCode();
       promoCodePromises.push(
-        promoCode.create({ code, count: 2 })
+        promoCode.create({ code,phone_number: '' ,count: 2 })
       );
     }
     await Promise.all(promoCodePromises);
-    console.log('Successfully generated 60 promo codes');
+    console.log(`Successfully generated ${code_counts} promo codes`);
     
   } catch (error) {
     console.log(error);

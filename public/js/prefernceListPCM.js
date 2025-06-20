@@ -498,18 +498,7 @@ function generatePdfList() {
     pdfTableBody.innerHTML = '';
     let index = 1;
     central_object.final_college_list.forEach((college) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${index}</td>
-            <td>${college.choice_code}</td>
-            <td>${college.college_name}</td>
-            <td>${college.branch_name}</td>
-            <td>${college.university}</td>
-            <td>${college.seat_type}</td>
-        `;
-        index++;
-        pdfTableBody.appendChild(row);
-        
+
         if(central_object.formData.tfws){
             const row_1 = document.createElement('tr');
             row_1.innerHTML = `
@@ -523,6 +512,20 @@ function generatePdfList() {
             index++;
             pdfTableBody.appendChild(row_1);
         }
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${index}</td>
+            <td>${college.choice_code}</td>
+            <td>${college.college_name}</td>
+            <td>${college.branch_name}</td>
+            <td>${college.university}</td>
+            <td>${college.seat_type}</td>
+        `;
+        index++;
+        pdfTableBody.appendChild(row);
+        
+        
     });
     
 }
@@ -588,7 +591,8 @@ async function savepdfintodatabase() {
         const pdfBlob = doc.output('blob');
         const formData = new FormData();
         formData.append('pdf', pdfBlob, 'preference_list.pdf');
-        formData.append('name',JSON.stringify(central_object.name))
+        formData.append('name',JSON.stringify(central_object.name));
+        formData.append('exam',JSON.stringify('Engineering'));
         console.log(formData);
         // 4. Send to backend for storage
         const response = await fetch('/prefernceListPCM/savePdf', {
@@ -632,8 +636,8 @@ function printPdf(){
 
     
     // Add student info
-    doc.setFontSize(16);
-    doc.text('Student Information', 14, 20);
+    doc.setFontSize(20);
+    doc.text('HB Educational Firm', 14, 20);
     doc.setFontSize(12);
     doc.text(`Name: ${central_object.name}`, 14, 30);
     doc.text(`General Rank: ${central_object.formData.generalRank}`, 14, 36);

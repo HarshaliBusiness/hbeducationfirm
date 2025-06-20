@@ -6,8 +6,8 @@ const {connectDB, db} = require('./database/db');
 const session = require('express-session');
 const isLoggedIn = require('./middleware/auth');
 
-
 const MongoStore = require('connect-mongo');
+
 
 app.use(session({
   secret: 'secret',
@@ -104,6 +104,8 @@ app.use('/payment',paymentRoutes);
 const privacyPolicyRoutes = require('./routes/privacyPolicyroute'); 
 app.use('/privacyPolicy',privacyPolicyRoutes);
 
+const adminPanelRoutes = require('./routes/adminnPanelroute'); 
+app.use('/adminPanel',adminPanelRoutes);
 
 app.listen(port,()=>{
     console.log('server listing at port 8080');

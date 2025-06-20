@@ -18,8 +18,9 @@ const new_data_of_student = {
 };
 
 function calculateRankRange(rank) {
+    // console.log(rank);
     let minRank = rank - 3000;
-    let maxRank = rank + 15000;
+    let maxRank = rank + 7000;
 
     if (rank < 3000) {
         minRank = 0;
@@ -81,7 +82,7 @@ async function getRankFromPercentile(percentile) {
             .single();
         
         if (error) throw error;
-        return data?.rank || null;
+        return data.Rank;
     } catch (error) {
         console.error('Error fetching rank:', error);
         throw error;
@@ -118,17 +119,15 @@ async function getColleges(formData) {
     if (formData.gender == 'Female') {
         caste_column += `
                 CASE
-                    WHEN r.LOPENS <> 0 AND r.LOPENO = 0 AND r.LOPENH = 0 THEN r.LOPENS::TEXT
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LOPENH::TEXT
-                    ELSE r.LOPENO::TEXT
+                    WHEN r.LOPENS <> 0 AND r.LOPENH = 0 THEN r.LOPENS::TEXT
+                    ELSE r.LOPENH::TEXT
                 END || ' (' || COALESCE(
                             (SELECT m.percentile 
                             FROM pharmacy_merit_list AS m 
                             WHERE m."Rank" = 
                                 CASE
-                                    WHEN r.LOPENS <> 0 AND r.LOPENO = 0 AND r.LOPENH = 0 THEN r.LOPENS
-                                    WHEN c.university = '${formData.homeUniversity}' THEN r.LOPENH
-                                    ELSE r.LOPENO
+                                    WHEN r.LOPENS <> 0 AND r.LOPENH = 0 THEN r.LOPENS
+                                    ELSE r.LOPENH
                                 END
                             LIMIT 1), '0'
                         ) || ')' AS LOPEN,
@@ -137,15 +136,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LOPENS <> 0 AND r.LOPENO = 0 AND r.LOPENH = 0 THEN r.LOPENS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LOPENH
-                    ELSE r.LOPENO
+                    WHEN r.LOPENS <> 0 AND r.LOPENH = 0 THEN r.LOPENS
+                    ELSE r.LOPENH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LOPENS <> 0 AND r.LOPENO = 0 AND r.LOPENH = 0 THEN r.LOPENS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LOPENH
-                    ELSE r.LOPENO
+                    WHEN r.LOPENS <> 0 AND r.LOPENH = 0 THEN r.LOPENS
+                    ELSE r.LOPENH
                 END = 0
             ) AND
         `;
@@ -162,17 +159,15 @@ async function getColleges(formData) {
     if (formData.caste == 'OBC' && formData.gender == 'Male') {
         caste_column += `
             CASE
-                WHEN r.GOBCS <> 0 AND r.GOBCO = 0 AND r.GOBCH = 0 THEN r.GOBCS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.GOBCH::TEXT
-                ELSE r.GOBCO::TEXT
+                WHEN r.GOBCS <> 0 AND r.GOBCH = 0 THEN r.GOBCS::TEXT
+                ELSE r.GOBCH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.GOBCS <> 0 AND r.GOBCO = 0 AND r.GOBCH = 0 THEN r.GOBCS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.GOBCH
-                                 ELSE r.GOBCO
+                                 WHEN r.GOBCS <> 0 AND r.GOBCH = 0 THEN r.GOBCS
+                                 ELSE r.GOBCH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS gobc,
@@ -181,15 +176,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.GOBCS <> 0 AND r.GOBCO = 0 AND r.GOBCH = 0 THEN r.GOBCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GOBCH
-                    ELSE r.GOBCO
+                    WHEN r.GOBCS <> 0  AND r.GOBCH = 0 THEN r.GOBCS
+                    ELSE r.GOBCH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.GOBCS <> 0 AND r.GOBCO = 0 AND r.GOBCH = 0 THEN r.GOBCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GOBCH
-                    ELSE r.GOBCO
+                    WHEN r.GOBCS <> 0 AND r.GOBCH = 0 THEN r.GOBCS
+                    ELSE r.GOBCH
                 END = 0
             ) AND
         `;
@@ -206,17 +199,16 @@ async function getColleges(formData) {
     if (formData.caste == 'OBC' && formData.gender == 'Female') {
         caste_column += `
             CASE
-                WHEN r.LOBCS <> 0 AND r.LOBCO = 0 AND r.LOBCH = 0 THEN r.LOBCS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.LOBCH::TEXT
-                ELSE r.LOBCO::TEXT
+                WHEN r.LOBCS <> 0  AND r.LOBCH = 0 THEN r.LOBCS::TEXT
+               
+                ELSE r.LOBCH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.LOBCS <> 0 AND r.LOBCO = 0 AND r.LOBCH = 0 THEN r.LOBCS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.LOBCH
-                                 ELSE r.LOBCO
+                                 WHEN r.LOBCS <> 0 AND r.LOBCH = 0 THEN r.LOBCS
+                                 ELSE r.LOBCH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS lobc,
@@ -225,15 +217,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LOBCS <> 0 AND r.LOBCO = 0 AND r.LOBCH = 0 THEN r.LOBCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LOBCH
-                    ELSE r.LOBCO
+                    WHEN r.LOBCS <> 0 AND r.LOBCH = 0 THEN r.LOBCS
+                    ELSE r.LOBCH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LOBCS <> 0 AND r.LOBCO = 0 AND r.LOBCH = 0 THEN r.LOBCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LOBCH
-                    ELSE r.LOBCO
+                    WHEN r.LOBCS <> 0 AND r.LOBCH = 0 THEN r.LOBCS
+                    ELSE r.LOBCH
                 END = 0
             ) AND
         `;
@@ -250,17 +240,15 @@ async function getColleges(formData) {
     if (formData.caste == 'SEBC' && formData.gender == 'Male') {
         caste_column += `
             CASE
-                WHEN r.GSEBCS <> 0 AND r.GSEBCO = 0 AND r.GSEBCH = 0 THEN r.GSEBCS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.GSEBCH::TEXT
-                ELSE r.GSEBCO::TEXT
+                WHEN r.GSEBCS <> 0  AND r.GSEBCH = 0 THEN r.GSEBCS::TEXT
+                ELSE r.GSEBCH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.GSEBCS <> 0 AND r.GSEBCO = 0 AND r.GSEBCH = 0 THEN r.GSEBCS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.GSEBCH
-                                 ELSE r.GSEBCO
+                                 WHEN r.GSEBCS <> 0 AND r.GSEBCH = 0 THEN r.GSEBCS
+                                 ELSE r.GSEBCH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS GSEBC,
@@ -269,15 +257,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.GSEBCS <> 0 AND r.GSEBCO = 0 AND r.GSEBCH = 0 THEN r.GSEBCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GSEBCH
-                    ELSE r.GSEBCO
+                    WHEN r.GSEBCS <> 0 AND r.GSEBCH = 0 THEN r.GSEBCS
+                    ELSE r.GSEBCH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.GSEBCS <> 0 AND r.GSEBCO = 0 AND r.GSEBCH = 0 THEN r.GSEBCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GSEBCH
-                    ELSE r.GSEBCO
+                    WHEN r.GSEBCS <> 0  AND r.GSEBCH = 0 THEN r.GSEBCS
+                    ELSE r.GSEBCH
                 END = 0
             ) AND
         `;
@@ -294,17 +280,15 @@ async function getColleges(formData) {
     if (formData.caste == 'SEBC' && formData.gender == 'Female') {
         caste_column += `
             CASE
-                WHEN r.LSEBCS <> 0 AND r.LSEBCO = 0 AND r.LSEBCH = 0 THEN r.LSEBCS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.LSEBCH::TEXT
-                ELSE r.LSEBCO::TEXT
+                WHEN r.LSEBCS <> 0 AND r.LSEBCH = 0 THEN r.LSEBCS::TEXT
+                ELSE r.LSEBCH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.LSEBCS <> 0 AND r.LSEBCO = 0 AND r.LSEBCH = 0 THEN r.LSEBCS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.LSEBCH
-                                 ELSE r.LSEBCO
+                                 WHEN r.LSEBCS <> 0  AND r.LSEBCH = 0 THEN r.LSEBCS
+                                 ELSE r.LSEBCH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS LSEBC,
@@ -313,15 +297,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LSEBCS <> 0 AND r.LSEBCO = 0 AND r.LSEBCH = 0 THEN r.LSEBCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LSEBCH
-                    ELSE r.LSEBCO
+                    WHEN r.LSEBCS <> 0 AND r.LSEBCH = 0 THEN r.LSEBCS
+                    ELSE r.LSEBCH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LSEBCS <> 0 AND r.LSEBCO = 0 AND r.LSEBCH = 0 THEN r.LSEBCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LSEBCH
-                    ELSE r.LSEBCO
+                    WHEN r.LSEBCS <> 0 AND r.LSEBCH = 0 THEN r.LSEBCS
+                    ELSE r.LSEBCH
                 END = 0
             ) AND
         `;
@@ -338,17 +320,15 @@ async function getColleges(formData) {
     if (formData.caste == 'ST' && formData.gender == 'Male') {
         caste_column += `
             CASE
-                WHEN r.GSTS <> 0 AND r.GSTO = 0 AND r.GSTH = 0 THEN r.GSTS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.GSTH::TEXT
-                ELSE r.GSTO::TEXT
+                WHEN r.GSTS <> 0 AND r.GSTH = 0 THEN r.GSTS::TEXT
+                ELSE r.GSTH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.GSTS <> 0 AND r.GSTO = 0 AND r.GSTH = 0 THEN r.GSTS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.GSTH
-                                 ELSE r.GSTO
+                                 WHEN r.GSTS <> 0  AND r.GSTH = 0 THEN r.GSTS
+                                 ELSE r.GSTH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS GST,
@@ -357,15 +337,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.GSTS <> 0 AND r.GSTO = 0 AND r.GSTH = 0 THEN r.GSTS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GSTH
-                    ELSE r.GSTO
+                    WHEN r.GSTS <> 0 AND r.GSTH = 0 THEN r.GSTS
+                    ELSE r.GSTH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.GSTS <> 0 AND r.GSTO = 0 AND r.GSTH = 0 THEN r.GSTS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GSTH
-                    ELSE r.GSTO
+                    WHEN r.GSTS <> 0 AND r.GSTH = 0 THEN r.GSTS
+                    ELSE r.GSTH
                 END = 0
             ) AND
         `;
@@ -382,17 +360,15 @@ async function getColleges(formData) {
     if (formData.caste == 'ST' && formData.gender == 'Female') {
         caste_column += `
             CASE
-                WHEN r.LSTS <> 0 AND r.LSTO = 0 AND r.LSTH = 0 THEN r.LSTS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.LSTH::TEXT
-                ELSE r.LSTO::TEXT
+                WHEN r.LSTS <> 0  AND r.LSTH = 0 THEN r.LSTS::TEXT
+                ELSE r.LSTH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.LSTS <> 0 AND r.LSTO = 0 AND r.LSTH = 0 THEN r.LSTS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.LSTH
-                                 ELSE r.LSTO
+                                 WHEN r.LSTS <> 0 AND r.LSTH = 0 THEN r.LSTS
+                                 ELSE r.LSTH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS LST,
@@ -400,15 +376,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LSTS <> 0 AND r.LSTO = 0 AND r.LSTH = 0 THEN r.LSTS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LSTH
-                    ELSE r.LSTO
+                    WHEN r.LSTS <> 0 AND r.LSTH = 0 THEN r.LSTS
+                    ELSE r.LSTH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LSTS <> 0 AND r.LSTO = 0 AND r.LSTH = 0 THEN r.LSTS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LSTH
-                    ELSE r.LSTO
+                    WHEN r.LSTS <> 0  AND r.LSTH = 0 THEN r.LSTS
+                    ELSE r.LSTH
                 END = 0
             ) AND
         `;
@@ -427,15 +401,14 @@ async function getColleges(formData) {
             CASE
                 WHEN r.GSCS <> 0 AND r.GSCO = 0 AND r.GSCH = 0 THEN r.GSCS::TEXT
                 WHEN c.university = '${formData.homeUniversity}' THEN r.GSCH::TEXT
-                ELSE r.GSCO::TEXT
+                ELSE r.GSCH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.GSCS <> 0 AND r.GSCO = 0 AND r.GSCH = 0 THEN r.GSCS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.GSCH
-                                 ELSE r.GSCO
+                                 WHEN r.GSCS <> 0 AND r.GSCH = 0 THEN r.GSCS
+                                 ELSE r.GSCH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS GSC,
@@ -444,15 +417,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.GSCS <> 0 AND r.GSCO = 0 AND r.GSCH = 0 THEN r.GSCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GSCH
-                    ELSE r.GSCO
+                    WHEN r.GSCS <> 0 AND r.GSCH = 0 THEN r.GSCS
+                    ELSE r.GSCH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.GSCS <> 0 AND r.GSCO = 0 AND r.GSCH = 0 THEN r.GSCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GSCH
-                    ELSE r.GSCO
+                    WHEN r.GSCS <> 0 AND r.GSCH = 0 THEN r.GSCS
+                    ELSE r.GSCH
                 END = 0
             ) AND
         `;
@@ -469,17 +440,15 @@ async function getColleges(formData) {
     if (formData.caste == 'SC' && formData.gender == 'Female') {
         caste_column += `
             CASE
-                WHEN r.LSCS <> 0 AND r.LSCO = 0 AND r.LSCH = 0 THEN r.LSCS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.LSCH::TEXT
-                ELSE r.LSCO::TEXT
+                WHEN r.LSCS <> 0 AND r.LSCH = 0 THEN r.LSCS::TEXT
+                ELSE r.LSCH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.LSCS <> 0 AND r.LSCO = 0 AND r.LSCH = 0 THEN r.LSCS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.LSCH
-                                 ELSE r.LSCO
+                                 WHEN r.LSCS <> 0 AND r.LSCH = 0 THEN r.LSCS
+                                 ELSE r.LSCH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS LSC,
@@ -488,14 +457,12 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LSCS <> 0 AND r.LSCO = 0 AND r.LSCH = 0 THEN r.LSCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LSCH
-                    ELSE r.LSCO
+                    WHEN r.LSCS <> 0 AND r.LSCH = 0 THEN r.LSCS
+                    ELSE r.LSCH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LSCS <> 0 AND r.LSCO = 0 AND r.LSCH = 0 THEN r.LSCS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LSCH
+                    WHEN r.LSCS <> 0 AND  r.LSCH = 0 THEN r.LSCS
                     ELSE r.LSCO
                 END = 0
             ) AND
@@ -513,17 +480,15 @@ async function getColleges(formData) {
     if (formData.caste == 'NT1' && formData.gender == 'Male') {
         caste_column += `
             CASE
-                WHEN r.GNT1S <> 0 AND r.GNT1O = 0 AND r.GNT1H = 0 THEN r.GNT1S::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.GNT1H::TEXT
-                ELSE r.GNT1O::TEXT
+                WHEN r.GNT1S <> 0  AND r.GNT1H = 0 THEN r.GNT1S::TEXT
+                ELSE r.GNT1H::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.GNT1S <> 0 AND r.GNT1O = 0 AND r.GNT1H = 0 THEN r.GNT1S
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.GNT1H
-                                 ELSE r.GNT1O
+                                 WHEN r.GNT1S <> 0  AND r.GNT1H = 0 THEN r.GNT1S
+                                 ELSE r.GNT1H
                              END
                          LIMIT 1), '0'
                     ) || ')' AS GNT1,
@@ -532,15 +497,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.GNT1S <> 0 AND r.GNT1O = 0 AND r.GNT1H = 0 THEN r.GNT1S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GNT1H
-                    ELSE r.GNT1O
+                    WHEN r.GNT1S <> 0 AND r.GNT1H = 0 THEN r.GNT1S
+                    ELSE r.GNT1H
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.GNT1S <> 0 AND r.GNT1O = 0 AND r.GNT1H = 0 THEN r.GNT1S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GNT1H
-                    ELSE r.GNT1O
+                    WHEN r.GNT1S <> 0 AND r.GNT1H = 0 THEN r.GNT1S
+                    ELSE r.GNT1H
                 END = 0
             ) AND
         `;
@@ -557,17 +520,15 @@ async function getColleges(formData) {
     if (formData.caste == 'NT1' && formData.gender == 'Female') {
         caste_column += `
             CASE
-                WHEN r.LNT1S <> 0 AND r.LNT1O = 0 AND r.LNT1H = 0 THEN r.LNT1S::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.LNT1H::TEXT
-                ELSE r.LNT1O::TEXT
+                WHEN r.LNT1S <> 0 AND r.LNT1H = 0 THEN r.LNT1S::TEXT
+                ELSE r.LNT1H::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.LNT1S <> 0 AND r.LNT1O = 0 AND r.LNT1H = 0 THEN r.LNT1S
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.LNT1H
-                                 ELSE r.LNT1O
+                                 WHEN r.LNT1S <> 0  AND r.LNT1H = 0 THEN r.LNT1S
+                                 ELSE r.LNT1H
                              END
                          LIMIT 1), '0'
                     ) || ')' AS LNT1,
@@ -575,15 +536,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LNT1S <> 0 AND r.LNT1O = 0 AND r.LNT1H = 0 THEN r.LNT1S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LNT1H
-                    ELSE r.LNT1O
+                    WHEN r.LNT1S <> 0 AND r.LNT1H = 0 THEN r.LNT1S
+                    ELSE r.LNT1H
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LNT1S <> 0 AND r.LNT1O = 0 AND r.LNT1H = 0 THEN r.LNT1S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LNT1H
-                    ELSE r.LNT1O
+                    WHEN r.LNT1S <> 0 AND r.LNT1H = 0 THEN r.LNT1S
+                    ELSE r.LNT1H
                 END = 0
             ) AND
         `;
@@ -600,17 +559,15 @@ async function getColleges(formData) {
     if (formData.caste == 'NT2' && formData.gender == 'Male') {
         caste_column += `
             CASE
-                WHEN r.GNT2S <> 0 AND r.GNT2O = 0 AND r.GNT2H = 0 THEN r.GNT2S::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.GNT2H::TEXT
-                ELSE r.GNT2O::TEXT
+                WHEN r.GNT2S <> 0 AND r.GNT2H = 0 THEN r.GNT2S::TEXT
+                ELSE r.GNT2H::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.GNT2S <> 0 AND r.GNT2O = 0 AND r.GNT2H = 0 THEN r.GNT2S
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.GNT2H
-                                 ELSE r.GNT2O
+                                 WHEN r.GNT2S <> 0 AND r.GNT2H = 0 THEN r.GNT2S
+                                 ELSE r.GNT2H
                              END
                          LIMIT 1), '0'
                     ) || ')' AS GNT2,
@@ -619,15 +576,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.GNT2S <> 0 AND r.GNT2O = 0 AND r.GNT2H = 0 THEN r.GNT2S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GNT2H
-                    ELSE r.GNT2O
+                    WHEN r.GNT2S <> 0  AND r.GNT2H = 0 THEN r.GNT2S
+                    ELSE r.GNT2H
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.GNT2S <> 0 AND r.GNT2O = 0 AND r.GNT2H = 0 THEN r.GNT2S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GNT2H
-                    ELSE r.GNT2O
+                    WHEN r.GNT2S <> 0  AND r.GNT2H = 0 THEN r.GNT2S
+                    ELSE r.GNT2H
                 END = 0
             ) AND
         `;
@@ -644,17 +599,15 @@ async function getColleges(formData) {
     if (formData.caste == 'NT2' && formData.gender == 'Female') {
         caste_column += `
             CASE
-                WHEN r.LNT2S <> 0 AND r.LNT2O = 0 AND r.LNT2H = 0 THEN r.LNT2S::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.LNT2H::TEXT
-                ELSE r.LNT2O::TEXT
+                WHEN r.LNT2S <> 0 AND r.LNT2H = 0 THEN r.LNT2S::TEXT
+                ELSE r.LNT2H::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.LNT2S <> 0 AND r.LNT2O = 0 AND r.LNT2H = 0 THEN r.LNT2S
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.LNT2H
-                                 ELSE r.LNT2O
+                                 WHEN r.LNT2S <> 0 AND r.LNT2H = 0 THEN r.LNT2S
+                                 ELSE r.LNT2H
                              END
                          LIMIT 1), '0'
                     ) || ')' AS LNT2,
@@ -663,15 +616,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LNT2S <> 0 AND r.LNT2O = 0 AND r.LNT2H = 0 THEN r.LNT2S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LNT2H
-                    ELSE r.LNT2O
+                    WHEN r.LNT2S <> 0  AND r.LNT2H = 0 THEN r.LNT2S
+                    ELSE r.LNT2H
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LNT2S <> 0 AND r.LNT2O = 0 AND r.LNT2H = 0 THEN r.LNT2S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LNT2H
-                    ELSE r.LNT2O
+                    WHEN r.LNT2S <> 0  AND r.LNT2H = 0 THEN r.LNT2S
+                    ELSE r.LNT2H
                 END = 0
             ) AND
         `;
@@ -688,17 +639,15 @@ async function getColleges(formData) {
     if (formData.caste == 'NT3' && formData.gender == 'Male') {
         caste_column += `
             CASE
-                WHEN r.GNT3S <> 0 AND r.GNT3O = 0 AND r.GNT3H = 0 THEN r.GNT3S::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.GNT3H::TEXT
-                ELSE r.GNT3O::TEXT
+                WHEN r.GNT3S <> 0 AND r.GNT3H = 0 THEN r.GNT3S::TEXT
+                ELSE r.GNT3H::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.GNT3S <> 0 AND r.GNT3O = 0 AND r.GNT3H = 0 THEN r.GNT3S
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.GNT3H
-                                 ELSE r.GNT3O
+                                 WHEN r.GNT3S <> 0 AND r.GNT3H = 0 THEN r.GNT3S
+                                 ELSE r.GNT3H
                              END
                          LIMIT 1), '0'
                     ) || ')' AS GNT3,
@@ -707,15 +656,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.GNT3S <> 0 AND r.GNT3O = 0 AND r.GNT3H = 0 THEN r.GNT3S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GNT3H
-                    ELSE r.GNT3O
+                    WHEN r.GNT3S <> 0 AND r.GNT3H = 0 THEN r.GNT3S
+                    ELSE r.GNT3H
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.GNT3S <> 0 AND r.GNT3O = 0 AND r.GNT3H = 0 THEN r.GNT3S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GNT3H
-                    ELSE r.GNT3O
+                    WHEN r.GNT3S <> 0  AND r.GNT3H = 0 THEN r.GNT3S
+                    ELSE r.GNT3H
                 END = 0
             ) AND
         `;
@@ -732,17 +679,15 @@ async function getColleges(formData) {
     if (formData.caste == 'NT3' && formData.gender == 'Female') {
         caste_column += `
             CASE
-                WHEN r.LNT3S <> 0 AND r.LNT3O = 0 AND r.LNT3H = 0 THEN r.LNT3S::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.LNT3H::TEXT
-                ELSE r.LNT3O::TEXT
+                WHEN r.LNT3S <> 0 AND r.LNT3H = 0 THEN r.LNT3S::TEXT
+                ELSE r.LNT3H::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.LNT3S <> 0 AND r.LNT3O = 0 AND r.LNT3H = 0 THEN r.LNT3S
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.LNT3H
-                                 ELSE r.LNT3O
+                                 WHEN r.LNT3S <> 0 AND r.LNT3H = 0 THEN r.LNT3S
+                                 ELSE r.LNT3H
                              END
                          LIMIT 1), '0'
                     ) || ')' AS LNT3,
@@ -751,15 +696,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LNT3S <> 0 AND r.LNT3O = 0 AND r.LNT3H = 0 THEN r.LNT3S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LNT3H
-                    ELSE r.LNT3O
+                    WHEN r.LNT3S <> 0  AND r.LNT3H = 0 THEN r.LNT3S
+                    ELSE r.LNT3H
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LNT3S <> 0 AND r.LNT3O = 0 AND r.LNT3H = 0 THEN r.LNT3S
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LNT3H
-                    ELSE r.LNT3O
+                    WHEN r.LNT3S <> 0 AND r.LNT3H = 0 THEN r.LNT3S
+                    ELSE r.LNT3H
                 END = 0
             ) AND
         `;
@@ -776,17 +719,15 @@ async function getColleges(formData) {
     if (formData.caste == 'VJ' && formData.gender == 'Male') {
         caste_column += `
             CASE
-                WHEN r.GVJS <> 0 AND r.GVJO = 0 AND r.GVJH = 0 THEN r.GVJS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.GVJH::TEXT
-                ELSE r.GVJO::TEXT
+                WHEN r.GVJS <> 0 AND r.GVJH = 0 THEN r.GVJS::TEXT
+                ELSE r.GVJH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.GVJS <> 0 AND r.GVJO = 0 AND r.GVJH = 0 THEN r.GVJS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.GVJH
-                                 ELSE r.GVJO
+                                 WHEN r.GVJS <> 0 AND r.GVJH = 0 THEN r.GVJS
+                                 ELSE r.GVJH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS GVJ,
@@ -795,15 +736,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.GVJS <> 0 AND r.GVJO = 0 AND r.GVJH = 0 THEN r.GVJS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GVJH
-                    ELSE r.GVJO
+                    WHEN r.GVJS <> 0 AND r.GVJH = 0 THEN r.GVJS
+                    ELSE r.GVJH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.GVJS <> 0 AND r.GVJO = 0 AND r.GVJH = 0 THEN r.GVJS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.GVJH
-                    ELSE r.GVJO
+                    WHEN r.GVJS <> 0 AND r.GVJH = 0 THEN r.GVJS
+                    ELSE r.GVJH
                 END = 0
             ) AND
         `;
@@ -820,17 +759,15 @@ async function getColleges(formData) {
     if (formData.caste == 'VJ' && formData.gender == 'Female') {
         caste_column += `
             CASE
-                WHEN r.LVJS <> 0 AND r.LVJO = 0 AND r.LVJH = 0 THEN r.LVJS::TEXT
-                WHEN c.university = '${formData.homeUniversity}' THEN r.LVJH::TEXT
-                ELSE r.LVJO::TEXT
+                WHEN r.LVJS <> 0 AND r.LVJH = 0 THEN r.LVJS::TEXT
+                ELSE r.LVJH::TEXT
             END || ' (' || COALESCE(
                         (SELECT m.percentile 
                          FROM pharmacy_merit_list AS m 
                          WHERE m."Rank" = 
                              CASE
-                                 WHEN r.LVJS <> 0 AND r.LVJO = 0 AND r.LVJH = 0 THEN r.LVJS
-                                 WHEN c.university = '${formData.homeUniversity}' THEN r.LVJH
-                                 ELSE r.LVJO
+                                 WHEN r.LVJS <> 0  AND r.LVJH = 0 THEN r.LVJS
+                                 ELSE r.LVJH
                              END
                          LIMIT 1), '0'
                     ) || ')' AS LVJ,
@@ -839,15 +776,13 @@ async function getColleges(formData) {
         caste_condition += `
             (
                 CASE 
-                    WHEN r.LVJS <> 0 AND r.LVJO = 0 AND r.LVJH = 0 THEN r.LVJS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LVJH
-                    ELSE r.LVJO
+                    WHEN r.LVJS <> 0  AND r.LVJH = 0 THEN r.LVJS
+                    ELSE r.LVJH
                 END BETWEEN ${new_data_of_student.minRank} AND ${new_data_of_student.maxRank}
                 OR 
                 CASE 
-                    WHEN r.LVJS <> 0 AND r.LVJO = 0 AND r.LVJH = 0 THEN r.LVJS
-                    WHEN c.university = '${formData.homeUniversity}' THEN r.LVJH
-                    ELSE r.LVJO
+                    WHEN r.LVJS <> 0 AND r.LVJH = 0 THEN r.LVJS
+                    ELSE r.LVJH
                 END = 0
             ) AND
         `;
@@ -1043,7 +978,7 @@ router.post('/College_list', async(req,res)=>{
     try {
         
         const rank = await getRankFromPercentile(formData.percentile);
-
+        // console.log(rank);
         calculateRankRange(rank);
         
         getCasteColumns(formData.caste, formData.gender);

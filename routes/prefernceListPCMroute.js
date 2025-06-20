@@ -94,23 +94,23 @@ async function getSelectedBranchCode(selected_branches) {
 }
 
 function calculateRankRange(formData) {
-    let minRank = formData.generalRank - 4000;
+    let minRank = formData.generalRank - 15000;
 
     if (formData.generalRank < 4000) {
         minRank = 0;
     }
 
     new_data_of_student.minRank = minRank;
-    new_data_of_student.maxRank = 200000;
+    new_data_of_student.maxRank = 2000000;
 
-    minRank = formData.allIndiaRank - 2000;
+    minRank = formData.allIndiaRank - 6000;
 
 
     if (formData.allIndiaRank < 2000) {
         minRank = 0;
     }
     new_data_of_student.allMinRank = minRank;
-    new_data_of_student.allMaxRank = 200000;
+    new_data_of_student.allMaxRank = 2000000;
     
 }
 
@@ -1153,17 +1153,19 @@ router.get('/student_name',async(req,res)=>{
 router.post('/savePdf',upload.single('pdf'),async (req,res)=>{
     try {
         const name = JSON.parse(req.body.name);
+        const exam = JSON.parse(req.body.exam);
         const pdfBuffer = req.file.buffer; // Access the uploaded file buffer
 
         // console.log(name);
         // console.log(pdfBuffer);
         const phone = req.session.user.phone;
+    
         const promo_code = req.session.user.promoCode;
         const payment = req.session.user.payment;
-
         const newPreferenceList = new Pdf({
             phone_number: phone,
             code: promo_code,
+            examType: exam,
             payment:payment,
             title: name,
             pdf: pdfBuffer

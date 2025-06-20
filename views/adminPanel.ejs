@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HB Educational Firm</title>
     <link rel="icon" href="/assets/logo.png" type="image/png">
-    <link rel="stylesheet" href="/css/adminPanel.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/adminPanel.css">
 </head>
 <body>
     <!-- Login Page -->
@@ -47,7 +47,8 @@
                     <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="#" data-section="students"><i class="fas fa-users"></i> Student Information</a></li>
                     <li><a href="#" data-section="purchases"><i class="fas fa-shopping-cart"></i> Purchase List</a></li>
-                    <li><a href="#" data-section="promo-codes"><i class="fas fa-tag"></i> Promo Codes</a></li>
+                    <li><a href="#" data-section="promo_codes"><i class="fas fa-tag"></i> Promo Codes</a></li>
+                    <li><a href="#" data-section="assigned_promos"><i class="fas fa-list-check"></i> Assigned Promos</a></li>
                 </ul>
             </div>
 
@@ -62,15 +63,11 @@
                         <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
                             <div style="flex: 1; min-width: 200px; background: rgba(26, 58, 143, 0.2); padding: 1rem; border-radius: 8px; border: 1px solid #1a3a8f;">
                                 <h4>Total Students</h4>
-                                <p style="font-size: 2rem; color: #4a90e2;">124</p>
+                                <p style="font-size: 2rem; color: #4a90e2;" id="totalStudents"></p>
                             </div>
                             <div style="flex: 1; min-width: 200px; background: rgba(26, 58, 143, 0.2); padding: 1rem; border-radius: 8px; border: 1px solid #1a3a8f;">
                                 <h4>Total Purchases</h4>
-                                <p style="font-size: 2rem; color: #4a90e2;">89</p>
-                            </div>
-                            <div style="flex: 1; min-width: 200px; background: rgba(26, 58, 143, 0.2); padding: 1rem; border-radius: 8px; border: 1px solid #1a3a8f;">
-                                <h4>Active Promo Codes</h4>
-                                <p style="font-size: 2rem; color: #4a90e2;">5</p>
+                                <p style="font-size: 2rem; color: #4a90e2;" id="totalPurchase"></p>
                             </div>
                         </div>
                     </div>
@@ -85,6 +82,7 @@
                                 <option value="">All Streams</option>
                                 <option value="Engineering">Engineering</option>
                                 <option value="Pharmacy">Pharmacy</option>
+                                <option value="NEET">NEET</option>
                                 <option value="BBA/BMS">BBA/BMS</option>
                                 <option value="BCA">BCA</option>
                             </select>
@@ -116,6 +114,7 @@
                                 <option value="">All Streams</option>
                                 <option value="Engineering">Engineering</option>
                                 <option value="Pharmacy">Pharmacy</option>
+                                <option value="NEET">NEET</option>
                                 <option value="BBA/BMS">BBA/BMS</option>
                                 <option value="BCA">BCA</option>
                             </select>
@@ -126,7 +125,6 @@
                                 <tr>
                                     <th>Student Name</th>
                                     <th>Phone Number</th>
-                                    <th>Email</th>
                                     <th>Stream</th>
                                     <th>Purchase Date</th>
                                     <th>Amount</th>
@@ -147,18 +145,65 @@
                             <!-- Promo codes will be populated here -->
                         </div>
                         
-                        <h3 style="margin-top: 2rem;">Add New Promo Code</h3>
+                        <!-- <h3 style="margin-top: 2rem;">Add New Promo Code</h3>
                         <div class="add-promo-form">
                             <input type="text" id="new-promo-code" placeholder="Promo code">
                             <input type="number" id="new-promo-limit" placeholder="Usage limit">
                             <button id="add-promo-btn">Add Promo Code</button>
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- Assigned Promos Section -->
+                <div id="assigned-promos-section" style="display: none;">
+                    <h2 class="section-title">Assigned Promo Codes</h2>
+                    <div class="card">
+                        <div class="filter-section">
+                            <input type="text" id="assigned-promo-search" placeholder="Search assigned promos...">
                         </div>
+                        <table class="assigned-students-table">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Promo Code</th>
+                                    <th>Limit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assigned-promos-table-body">
+                                <!-- Assigned promo data will be populated here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Assign Promo Modal -->
+    <div id="assign-promo-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Assign Promo Code</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="search-student-form">
+                <input type="text" id="student-search-input" placeholder="Search student by phone number...">
+                <div class="search-results" id="student-search-results">
+                    <!-- Search results will appear here -->
+                </div>
+                <button class="assign-btn" id="assign-promo-btn">Assign Promo Code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Popup -->
+    <div id="error-popup" class="error-popup">
+        <div class="error-popup-content">
+            <span class="close-error-popup">&times;</span>
+            <p id="error-message"></p>
+        </div>
+    </div>
     <script src="/js/adminPanel.js"></script>
 </body>
 </html>

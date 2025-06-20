@@ -19,11 +19,13 @@ const userSchema = new mongoose.Schema({
 
 const promoCodeSchema = new mongoose.Schema({
   code : String,
+  phone_number : Number,
   count : Number
 });
 
 const pdfSchema = new mongoose.Schema({
   phone_number: String,
+  examType: String,
   code: String,
   payment: String,
   title: { type: String, required: true },
