@@ -22,7 +22,6 @@ function generatePromoCode() {
   return result.substring(0, 11);
 }
 
-
 router.get('/',async (req,res)=>{
 
   try {

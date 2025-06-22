@@ -1309,3 +1309,114 @@ nav {
 
 
 
+/* Counsellor Section */
+.counsellor-section {
+    background: linear-gradient(135deg, #0e0e24 0%, #1a1a3a 100%);
+    padding: 5rem 2rem;
+    border-top: 1px solid #1a3a8f;
+    border-bottom: 1px solid #1a3a8f;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.counsellor-profile {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    margin-top: 3rem;
+    background: rgba(26, 58, 143, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 1px solid #1a3a8f;
+}
+
+.counsellor-photo {
+    flex: 0 0 300px;
+}
+
+.counsellor-photo img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 00px 20px rgb(149, 147, 147); /*rgba(0, 0, 0, 0.2);*/
+}
+
+.counsellor-info {
+    flex: 1;
+}
+
+.counsellor-info h3 {
+    font-size: 2rem;
+    color: #4a90e2;
+    margin-bottom: 0.5rem;
+}
+
+.designation {
+    color: #b8c2d8;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.bio {
+    color: #b8c2d8;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #ffffff;
+}
+
+.contact-item i {
+    color: #4a90e2;
+    font-size: 1.2rem;
+}
+
+.counsellor-section .social-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.counsellor-section .social-links a {
+    color: #b8c2d8;
+    font-size: 1.5rem;
+    transition: color 0.3s;
+}
+
+.counsellor-section .social-links a:hover {
+    color: #4a90e2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .counsellor-profile {
+        flex-direction: column;
+    }
+    
+    .counsellor-photo {
+        flex: 0 0 auto;
+        width: 80%;
+        max-width: 300px;
+    }
+    
+    .contact-info {
+        flex-direction: column;
+    }
+}
+
+
+

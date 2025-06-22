@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
 
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     email : String,
@@ -33,9 +33,28 @@ const pdfSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const specialReservationSchema = new mongoose.Schema({
+  code : String,
+  examType: String,
+  phone_number : Number,
+  payment : String,
+  generalRank: Number,
+  allIndiaRank: Number,
+  caste: String,
+  gender: String,
+  tfws: Boolean,
+  branchCategories: [String],
+  city: [String],
+  homeuniversity: String,
+  specialReservation: String
+});
+
 const Pdf = mongoose.model('Pdf', pdfSchema);
 const User = mongoose.model('User', userSchema);
 const promoCode = mongoose.model('promoCode',promoCodeSchema);
+const specialReservation = mongoose.model('specialReservation', specialReservationSchema);
 
-module.exports = {User, promoCode, Pdf};
+module.exports = {User, promoCode, Pdf,specialReservation};
+
+
 

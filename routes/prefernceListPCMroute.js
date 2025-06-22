@@ -2,13 +2,46 @@ const express = require('express');
 const router = express.Router();
 const {db, supabase} = require('../database/db');
 const isLoggedIn = require('../middleware/auth');
-const {User, promoCode, Pdf} = require('../database/schema');
+const {User, promoCode, Pdf ,specialReservation} = require('../database/schema');
 const multer = require('multer');
 const upload = multer({ limits: { fileSize: 50 * 1024 * 1024 } }); // 50MB limit
 
 router.get('/', isLoggedIn,(req,res)=>{
   res.render('prefernceListPCM');
 });
+
+
+router.post('/specialReservationMsg', async (req, res) => {
+    try {
+        const {formData, special_reservation, exam_type} = req.body;
+        // console.log(formData, special_reservation);
+        const user = req.session.user;
+        // console.log(user);
+        const newUserData = {
+            code: user.promoCode,
+            examType: exam_type,
+            phone_number: user.phone,
+            payment: user.payment,
+            generalRank: formData.generalRank,
+            allIndiaRank: formData.allIndiaRank,
+            caste: formData.caste,
+            gender: formData.gender,
+            tfws: formData.tfws,
+            branchCategories: formData.branchCategories,
+            city: formData.city,
+            homeuniversity: formData.homeuniversity,
+            specialReservation: special_reservation
+        }
+
+        const newspecialReservation = new specialReservation(newUserData);
+        await newspecialReservation.save();
+        res.json({isSave: true});
+    } catch (err) {
+        console.error(err);
+        res.json({isSave: false});
+    }
+});
+
 
 router.get('/fetchBranches', async (req, res) => {
     try {
@@ -86,28 +119,28 @@ function calculateRankRange(formData) {
 
     let minRank = formData.generalRank;
 
-    if (formData.generalRank < 4000) {
+    if (formData.generalRank < 7000) {
         subMinRank = 0;
     }else if(formData.generalRank < 20000){
-        subMinRank = 4000;
-    }else if(formData.generalRank < 30000){
-        subMinRank = 4500;
-    }else if(formData.generalRank < 40000){
-        subMinRank = 5000;
-    }else if(formData.generalRank < 50000){
-        subMinRank = 5500;
-    }else if(formData.generalRank < 60000){
-        subMinRank = 6000;
-    }else if(formData.generalRank < 70000){
         subMinRank = 7000;
-    }else if(formData.generalRank < 80000){
+    }else if(formData.generalRank < 30000){
         subMinRank = 8000;
-    }else if(formData.generalRank < 90000){
-        subMinRank = 9000;
-    }else if(formData.generalRank < 100000){
+    }else if(formData.generalRank < 40000){
         subMinRank = 10000;
+    }else if(formData.generalRank < 50000){
+        subMinRank = 12000;
+    }else if(formData.generalRank < 60000){
+        subMinRank = 15000;
+    }else if(formData.generalRank < 70000){
+        subMinRank = 17000;
+    }else if(formData.generalRank < 80000){
+        subMinRank = 19000;
+    }else if(formData.generalRank < 90000){
+        subMinRank = 21000;
+    }else if(formData.generalRank < 100000){
+        subMinRank = 23000;
     }else {
-        subMinRank = 11000;
+        subMinRank = 26000;
     }
     
 
@@ -1145,6 +1178,7 @@ router.post('/College_list', async (req, res) => {
         }
 
         colleges = colleges.slice(0,college_counts);
+        colleges.sort((a, b) => b.points - a.points);
         // console.log(colleges);
         res.json(colleges);
     } catch (error) {

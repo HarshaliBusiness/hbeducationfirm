@@ -1,5 +1,3 @@
-// const { response } = require("express");
-
 // Dummy data for students
 const students = [];
 
@@ -11,6 +9,9 @@ let promoCodes = [];
 
 // Dummy data for assigned promos
 let assignedPromos = [];
+
+// Dummy data for special reservations
+let specialReservations = [];
 
 // DOM elements
 const loginPage = document.getElementById('login-page');
@@ -24,7 +25,8 @@ const sections = {
     students: document.getElementById('students-section'),
     purchases: document.getElementById('purchases-section'),
     promo_codes: document.getElementById('promo-codes-section'),
-    assigned_promos: document.getElementById('assigned-promos-section')
+    assigned_promos: document.getElementById('assigned-promos-section'),
+    special_reservations: document.getElementById('special-reservations-section')
 };
 
 // Modal elements
@@ -50,6 +52,7 @@ loginForm.addEventListener('submit', function(e) {
         populatePurchaseTable();
         populatePromoCodes();
         populateAssignedPromos();
+        populateSpecialReservations();
     } else {
         alert('Invalid phone number or password');
     }
@@ -74,7 +77,6 @@ sidebarLinks.forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault();
         const section = this.getAttribute('data-section');
-        // console.log(section);
         showSection(section);
         
         // Update active state
@@ -166,7 +168,6 @@ function populatePromoCodes() {
     const container = document.getElementById('promo-codes-list');
     container.innerHTML = '';
     
-    // console.log('Show : ', promoCodes);
     promoCodes.forEach(promo => {
         const promoCard = document.createElement('div');
         promoCard.className = 'promo-card';
@@ -189,29 +190,15 @@ function populatePromoCodes() {
             openAssignPromoModal(code);
         });
     });
-    
-    document.querySelectorAll('.edit-promo').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const code = this.getAttribute('data-code');
-            editPromoCode(code);
-        });
-    });
-    
-    document.querySelectorAll('.delete-promo').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const code = this.getAttribute('data-code');
-            deletePromoCode(code);
-        });
-    });
 }
 
 // Populate assigned promos
+
 function populateAssignedPromos(searchQuery = '') {
     const tbody = document.getElementById('assigned-promos-table-body');
     tbody.innerHTML = '';
-    
+
     let filteredAssignedPromos = assignedPromos;
-    
     if (searchQuery) {
         const query = searchQuery.toLowerCase();
         filteredAssignedPromos = filteredAssignedPromos.filter(ap => 
@@ -231,6 +218,120 @@ function populateAssignedPromos(searchQuery = '') {
         `;
         tbody.appendChild(row);
     });
+}
+
+// Populate special reservations
+function populateSpecialReservations(searchQuery = '') {
+    const container = document.getElementById('reservation-cards-container');
+    container.innerHTML = '';
+    
+    let filteredReservations = specialReservations;
+    
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filteredReservations = filteredReservations.filter(reservation => 
+            reservation.name.toLowerCase().includes(query) || 
+            reservation.phone.includes(query) ||
+            reservation.promoCode.toLowerCase().includes(query) ||
+            reservation.email.toLowerCase().includes(query)
+        );
+    }
+    
+    filteredReservations.forEach(reservation => {
+        const card = document.createElement('div');
+        card.className = 'reservation-card';
+        card.innerHTML = `
+            <div class="reservation-card-header">
+                <div class="reservation-card-title">${reservation.name} (${reservation.phone})</div>
+                <button class="reservation-card-delete" data-id="${reservation.id}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            <div class="reservation-card-details">
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Email</span>
+                    <span class="reservation-card-value">${reservation.email}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Promo Code</span>
+                    <span class="reservation-card-value">${reservation.promoCode}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Payment</span>
+                    <span class="reservation-card-value">${reservation.payment}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">General Rank</span>
+                    <span class="reservation-card-value">${reservation.generalRank}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">All India Rank</span>
+                    <span class="reservation-card-value">${reservation.allIndiaRank}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Caste</span>
+                    <span class="reservation-card-value">${reservation.caste}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Gender</span>
+                    <span class="reservation-card-value">${reservation.gender}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">TFWS</span>
+                    <span class="reservation-card-value">${reservation.tfws ? 'Yes' : 'No'}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Branch Categories</span>
+                    <span class="reservation-card-value">${reservation.branchCategories.join(', ')}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Cities</span>
+                    <span class="reservation-card-value">${reservation.cities.join(', ')}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Home University</span>
+                    <span class="reservation-card-value">${reservation.homeUniversity}</span>
+                </div>
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Special Reservation</span>
+                    <span class="reservation-card-value">${reservation.specialReservation}</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+    
+    // Add event listeners for delete buttons
+    document.querySelectorAll('.reservation-card-delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const reservationId = this.getAttribute('data-id');
+            deleteReservation(reservationId);
+        });
+    });
+}
+
+// Delete reservation
+async function deleteReservation(Id) {
+    try {
+        // In a real app, you would make an API call here to delete the reservation
+        const response = await fetch(`/adminPanel/deleteReservation/${Id}`, {
+            method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+           
+            specialReservations = specialReservations.filter(r => r.id !== Id);
+            populateSpecialReservations();
+            document.getElementById('totalReservations').textContent = specialReservations.length;
+        } else {
+            showError(data.message || 'Failed to delete reservation');
+        }
+    } catch (error) {
+        console.error('Error deleting reservation:', error);
+        showError('Error deleting reservation');
+    }
 }
 
 // Open assign promo modal
@@ -287,46 +388,6 @@ studentSearchInput.addEventListener('input', function() {
     });
 });
 
-// Search students
-// document.getElementById('student-search').addEventListener('input', function() {
-//     const stream = document.getElementById('student-stream-filter').value;
-//     const searchQuery = this.value.trim().toLowerCase();
-    
-//     // Get all students
-//     let filteredStudents = [...students];
-    
-//     // Apply stream filter if selected
-//     if (stream) {
-//         filteredStudents = filteredStudents.filter(student => student.stream === stream);
-//     }
-    
-//     // Apply search query if exists
-//     if (searchQuery) {
-//         filteredStudents = filteredStudents.filter(student => 
-//             (student.name && student.name.toLowerCase().includes(searchQuery)) || 
-//             (student.surname && student.surname.toLowerCase().includes(searchQuery)) ||
-//             (student.phone && student.phone.includes(searchQuery)) ||
-//             (student.email && student.email.toLowerCase().includes(searchQuery))
-//         );
-//     }
-    
-//     // Repopulate the table with filtered results
-//     const tbody = document.getElementById('student-table-body');
-//     tbody.innerHTML = '';
-    
-//     filteredStudents.forEach(student => {
-//         const row = document.createElement('tr');
-//         row.innerHTML = `
-//             <td>${student.name || ''}</td>
-//             <td>${student.surname || ''}</td>
-//             <td>${student.phone || ''}</td>
-//             <td>${student.email || ''}</td>
-//             <td>${student.stream || ''}</td>
-//         `;
-//         tbody.appendChild(row);
-//     });
-// });
-
 // Assign promo code to student
 assignPromoBtn.addEventListener('click',async function() {
     try {
@@ -334,7 +395,6 @@ assignPromoBtn.addEventListener('click',async function() {
         const selectedStudent = document.querySelector('.student-result.selected');
         
         if (!selectedStudent) {
-            // alert('Please select a student');
             showError('Please select a student');
             return;
         }
@@ -348,7 +408,6 @@ assignPromoBtn.addEventListener('click',async function() {
         );
         
         if (alreadyAssigned) {
-            // alert('This promo code is  to this student');
             showError('Already assigned.');
             return;
         }
@@ -356,12 +415,9 @@ assignPromoBtn.addEventListener('click',async function() {
         // Find the promo to get its limit
         const promo = promoCodes.find(p => p.code === currentPromoCode);
         if (!promo) {
-            // alert('Promo code not found');
             showError('Invalide Promo code.');
             return;
         }
-        
-        
         
         const response = await fetch('/adminPanel/assignPromoCode', {
             method: 'POST',
@@ -372,7 +428,6 @@ assignPromoBtn.addEventListener('click',async function() {
         });
 
         const data = await response.json();
-        console.log(data);
         
         if(!data.isAssign){
             return showError(data.msg);
@@ -383,18 +438,16 @@ assignPromoBtn.addEventListener('click',async function() {
             promoCode: currentPromoCode,
             limit: promo.limit
         });
+        
         // Update UI
         populatePromoCodes();
         populateAssignedPromos();
         assignPromoModal.style.display = 'none';
         
-        // alert(`Promo code ${currentPromoCode} successfully assigned to ${studentName}`);
-
     } catch (error) {
         console.log(error);
     }
 });
-
 
 // Filter students by stream
 document.getElementById('student-stream-filter').addEventListener('change', function() {
@@ -430,12 +483,19 @@ document.getElementById('assigned-promo-search').addEventListener('input', funct
     populateAssignedPromos(searchQuery);
 });
 
+// Search reservations
+document.getElementById('reservation-search').addEventListener('input', function() {
+    const searchQuery = this.value;
+    populateSpecialReservations(searchQuery);
+});
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', async function() {
-
     await student_info();
     await student_purchases();
     await fetchPromoCodes();
+    await fetchSpecialReservations();
+    
     // Create overlay for mobile menu
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
@@ -456,6 +516,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             <li><a href="#" data-section="purchases"><i class="fas fa-shopping-cart"></i> Purchase List</a></li>
             <li><a href="#" data-section="promo-codes"><i class="fas fa-tag"></i> Promo Codes</a></li>
             <li><a href="#" data-section="assigned-promos"><i class="fas fa-list-check"></i> Assigned Promos</a></li>
+            <li><a href="#" data-section="special-reservations"><i class="fas fa-star"></i> Special Reservations</a></li>
         </ul>
         <div class="auth-buttons">
             <button class="btn btn-outline" id="logout-btn-mobile"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -497,21 +558,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     });
 
-    
-   
-
     document.getElementById('totalStudents').textContent = students.length;
     document.getElementById('totalPurchase').textContent = purchases.length;
+    document.getElementById('totalReservations').textContent = specialReservations.length;
     populateStudentTable();
     populatePurchaseTable();
     populatePromoCodes();
     populateAssignedPromos();
+    populateSpecialReservations();
 });
 
 // Load student info from API
 async function student_info() {
     try {
-        // This would be your actual API call
         const response = await fetch('/adminPanel/studentInformation');
         const data = await response.json();
 
@@ -546,7 +605,6 @@ async function student_info() {
 // Load student purchases from API
 async function student_purchases() {
     try {
-        // This would be your actual API call
         const response = await fetch('/adminPanel/studentPurchase');
         const data = await response.json();
         
@@ -569,11 +627,9 @@ async function student_purchases() {
 }
 
 async function fetchPromoCodes() {
-    
     try {
         const response = await fetch('/adminPanel/promoCodes');
         const data = await response.json();
-        // console.log(data);
 
         data.forEach(element => {
             if(element.phone_number == null){
@@ -597,6 +653,41 @@ async function fetchPromoCodes() {
     }
 }
 
+// Fetch special reservations from API
+async function fetchSpecialReservations() {
+    try {
+        const response = await fetch('/adminPanel/specialReservations');
+        const data = await response.json();
+        console.log(data);
+        console.log(data[0].extra_info);
+
+        // Assuming the API returns an array of reservation objects
+        data.forEach(reservation => {
+            let name = reservation.extra_info[0].first_name + ' ' + reservation.extra_info[0].last_name;
+            console.log();
+            specialReservations.push({
+                id: reservation._id,
+                name: name,
+                phone: reservation.phone_number,
+                email: reservation.extra_info[0].email,
+                promoCode: reservation.code,
+                payment: reservation.payment,
+                generalRank: reservation.generalRank,
+                allIndiaRank: reservation.allIndiaRank,
+                caste: reservation.caste,
+                gender: reservation.gender,
+                tfws: reservation.tfws,
+                branchCategories: reservation.branchCategories,
+                cities: reservation.city,
+                homeUniversity: reservation.homeuniversity,
+                specialReservation: reservation.specialReservation
+            });
+        });
+
+    } catch (error) {
+        console.error('Error fetching special reservations:', error);
+    }
+}
 
 // Error popup elements
 const errorPopup = document.getElementById('error-popup');

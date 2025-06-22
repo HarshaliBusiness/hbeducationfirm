@@ -1,10 +1,42 @@
 const express = require('express');
 const router = express.Router();
 const {db, supabase} = require('../database/db');
-const {User, promoCode, Pdf} = require('../database/schema');
+const {User, promoCode, Pdf, specialReservation} = require('../database/schema');
 
 router.get('/',(req,res)=>{
   res.render('adminPanel');
+});
+
+router.get('/specialReservations', async(req, res)=>{
+  try {
+    const data = await specialReservation.aggregate([
+      {
+        $lookup: {
+          from: 'users', // must match the actual *collection name* in MongoDB (lowercase, plural usually)
+          localField: 'phone_number',
+          foreignField: 'phone_number',
+          as: 'extra_info'
+        }
+      }
+    ]);
+
+    res.json(data);
+
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.delete('/deleteReservation/:Id', async (req, res) => {
+  try {
+    const result = await specialReservation.findByIdAndDelete(req.params.Id);
+    if (!result) {
+      return res.status(404).json({success: false, message: 'User not found' });
+    }
+    res.json({ success: true,message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false,error: 'Server error' });
+  }
 });
 
 
@@ -28,30 +60,6 @@ router.get('/studentPurchase',async (req,res)=>{
   }
 });
 
-// router.get('/promoCodes',async (req,res)=>{
-//   try {
-//     // const codes = await promoCode.find({});
-//     // console.log(purchase);
-//     // res.json(codes);
-
-//     const data = await promoCode.aggregate([
-//       {
-//         $lookup:{
-//           from: 'User',
-//           localField: 'phone_number',
-//           foreignField: 'phone_number',
-//           as: 'extra_info'
-//         }
-//       }
-//     ]).toArray();
-
-//     console.log(data);
-//     res.json(data);
-
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
 router.get('/promoCodes', async (req, res) => {
   try {
@@ -98,7 +106,6 @@ router.post('/assignPromoCode', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 
 module.exports = router;

@@ -321,6 +321,42 @@ async function fetchUniversity() {
 async function generateCollegeList(formData) {
     try {
 
+        collegeCardsContainer.innerHTML = '';
+        if (central_object.specialReservation != 'No') {
+            document.getElementById('downloadPdfBtn').style.display = 'none';
+            // console.log(formData);
+            // console.log(central_object.specialReservation);
+            let exam_type = 'Engineering';
+            let special_reservation = central_object.specialReservation;
+            const response = await fetch('/prefernceListPCM/specialReservationMsg', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({formData, special_reservation, exam_type})
+            });
+
+            const data = await response.json();
+            if(data.isSave){
+                collegeCardsContainer.innerHTML = `
+                    <div class="contact-message">
+                        <h3>Thank you for your application!</h3>
+                        <p>Our team will contact you within 24 hours regarding your special reservation.</p>
+                    </div>
+                `;
+                resultsContainer.style.display = 'block';
+            }else{
+                collegeCardsContainer.innerHTML = `
+                    <div class="contact-message">
+                        <h3>Thank you for your application!</h3>
+                        <p>Internal server error.</p>
+                    </div>
+                `;
+                resultsContainer.style.display = 'block';
+            }
+            return;
+        }
+
         const response_1 = await fetch('/payment');
         const data_1 = await response_1.json();
         // console.log(data_1);
@@ -358,19 +394,7 @@ async function generateCollegeList(formData) {
 
 function displayColleges(colleges, formData) {
     collegeCardsContainer.innerHTML = '';
-
-    // console.log(central_object.specialReservation);
-    if (central_object.specialReservation != 'No') {
-        collegeCardsContainer.innerHTML = `
-            <div class="contact-message">
-                <h3>Thank you for your application!</h3>
-                <p>Our team will contact you within 24 hours regarding your ${formData.specialReservation} reservation.</p>
-            </div>
-        `;
-        resultsContainer.style.display = 'block';
-        return;
-    }
-    
+    document.getElementById('downloadPdfBtn').style.display = 'block';
     // Original college list display logic
     if (!colleges || colleges.length === 0) {
         collegeCardsContainer.innerHTML = '<p>No colleges found matching your criteria.</p>';

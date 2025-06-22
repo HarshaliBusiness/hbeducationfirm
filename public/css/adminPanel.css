@@ -619,5 +619,84 @@ tr:hover {
     color: #ff6b6b;
 }
 
+/* Reservation Cards Styles */
+.reservation-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
 
+.reservation-card {
+    background: rgba(26, 58, 143, 0.1);
+    border: 1px solid #1a3a8f;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
+.reservation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #1a3a8f;
+}
+
+.reservation-card-title {
+    font-size: 1.2rem;
+    color: #4a90e2;
+}
+
+.reservation-card-delete {
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.reservation-card-delete:hover {
+    color: #ff4d4d;
+}
+
+.reservation-card-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+}
+
+.reservation-card-detail {
+    margin-bottom: 0.5rem;
+}
+
+.reservation-card-label {
+    font-weight: 600;
+    color: #b8c2d8;
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+}
+
+.reservation-card-value {
+    color: #ffffff;
+    word-break: break-word;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+    .reservation-cards-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .reservation-card-details {
+        grid-template-columns: 1fr;
+    }
+}
