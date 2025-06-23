@@ -50,6 +50,7 @@
                     <li><a href="#" data-section="promo_codes"><i class="fas fa-tag"></i> Promo Codes</a></li>
                     <li><a href="#" data-section="assigned_promos"><i class="fas fa-list-check"></i> Assigned Promos</a></li>
                     <li><a href="#" data-section="special_reservations"><i class="fas fa-star"></i> Special Reservations</a></li>
+                    <li><a href="#" data-section="contact_forms"><i class="fas fa-envelope"></i> Contact Forms</a></li>
                 </ul>
             </div>
 
@@ -73,6 +74,10 @@
                             <div style="flex: 1; min-width: 200px; background: rgba(26, 58, 143, 0.2); padding: 1rem; border-radius: 8px; border: 1px solid #1a3a8f;">
                                 <h4>Special Reservations</h4>
                                 <p style="font-size: 2rem; color: #4a90e2;" id="totalReservations"></p>
+                            </div>
+                            <div style="flex: 1; min-width: 200px; background: rgba(26, 58, 143, 0.2); padding: 1rem; border-radius: 8px; border: 1px solid #1a3a8f;">
+                                <h4>Contact Forms</h4>
+                                <p style="font-size: 2rem; color: #4a90e2;" id="totalContactForms"></p>
                             </div>
                         </div>
                     </div>
@@ -187,6 +192,19 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Contact Forms Section -->
+                <div id="contact-forms-section" style="display: none;">
+                    <h2 class="section-title">Contact Forms</h2>
+                    <div class="card">
+                        <div class="filter-section">
+                            <input type="text" id="contact-form-search" placeholder="Search contact forms...">
+                        </div>
+                        <div class="contact-form-cards-container" id="contact-form-cards-container">
+                            <!-- Contact form cards will be populated here -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -206,7 +224,7 @@
                 <button class="assign-btn" id="assign-promo-btn">Assign Promo Code</button>
             </div>
         </div>
-    </div>.
+    </div>
 
     <!-- Error Popup -->
     <div id="error-popup" class="error-popup">

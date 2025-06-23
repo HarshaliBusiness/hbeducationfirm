@@ -13,6 +13,9 @@ let assignedPromos = [];
 // Dummy data for special reservations
 let specialReservations = [];
 
+// Dummy data for contact forms
+let contactForms = [];
+
 // DOM elements
 const loginPage = document.getElementById('login-page');
 const adminPanel = document.getElementById('admin-panel');
@@ -26,7 +29,8 @@ const sections = {
     purchases: document.getElementById('purchases-section'),
     promo_codes: document.getElementById('promo-codes-section'),
     assigned_promos: document.getElementById('assigned-promos-section'),
-    special_reservations: document.getElementById('special-reservations-section')
+    special_reservations: document.getElementById('special-reservations-section'),
+    contact_forms: document.getElementById('contact-forms-section')
 };
 
 // Modal elements
@@ -53,6 +57,7 @@ loginForm.addEventListener('submit', function(e) {
         populatePromoCodes();
         populateAssignedPromos();
         populateSpecialReservations();
+        populateContactForms();
     } else {
         alert('Invalid phone number or password');
     }
@@ -193,7 +198,6 @@ function populatePromoCodes() {
 }
 
 // Populate assigned promos
-
 function populateAssignedPromos(searchQuery = '') {
     const tbody = document.getElementById('assigned-promos-table-body');
     tbody.innerHTML = '';
@@ -310,6 +314,56 @@ function populateSpecialReservations(searchQuery = '') {
     });
 }
 
+// Populate contact forms
+function populateContactForms(searchQuery = '') {
+    const container = document.getElementById('contact-form-cards-container');
+    container.innerHTML = '';
+    
+    let filteredContactForms = contactForms;
+    
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filteredContactForms = filteredContactForms.filter(form => 
+            form.name.toLowerCase().includes(query) || 
+            form.phone.includes(query) ||
+            form.email.toLowerCase().includes(query) ||
+            form.message.toLowerCase().includes(query)
+        );
+    }
+    
+    filteredContactForms.forEach(form => {
+        const card = document.createElement('div');
+        card.className = 'contact-form-card';
+        card.innerHTML = `
+            <div class="contact-form-card-header">
+                <div class="contact-form-card-title">${form.name} (${form.phone})</div>
+                <button class="contact-form-card-delete" data-id="${form.id}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            <div class="contact-form-card-details">
+                <div class="contact-form-card-detail">
+                    <span class="contact-form-card-label">Email</span>
+                    <span class="contact-form-card-value">${form.email}</span>
+                </div>
+                <div class="contact-form-card-detail">
+                    <span class="contact-form-card-label">Message</span>
+                    <span class="contact-form-card-value">${form.message}</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+    
+    // Add event listeners for delete buttons
+    document.querySelectorAll('.contact-form-card-delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const formId = this.getAttribute('data-id');
+            deleteContactForm(formId);
+        });
+    });
+}
+
 // Delete reservation
 async function deleteReservation(Id) {
     try {
@@ -331,6 +385,29 @@ async function deleteReservation(Id) {
     } catch (error) {
         console.error('Error deleting reservation:', error);
         showError('Error deleting reservation');
+    }
+}
+
+// Delete contact form
+async function deleteContactForm(Id) {
+    try {
+        // In a real app, you would make an API call here to delete the contact form
+        const response = await fetch(`/adminPanel/deleteContactForm/${Id}`, {
+            method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            contactForms = contactForms.filter(form => form.id !== Id);
+            populateContactForms();
+            document.getElementById('totalContactForms').textContent = contactForms.length;
+        } else {
+            showError(data.message || 'Failed to delete contact form');
+        }
+    } catch (error) {
+        console.error('Error deleting contact form:', error);
+        showError('Error deleting contact form');
     }
 }
 
@@ -489,12 +566,19 @@ document.getElementById('reservation-search').addEventListener('input', function
     populateSpecialReservations(searchQuery);
 });
 
+// Search contact forms
+document.getElementById('contact-form-search').addEventListener('input', function() {
+    const searchQuery = this.value;
+    populateContactForms(searchQuery);
+});
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', async function() {
     await student_info();
     await student_purchases();
     await fetchPromoCodes();
     await fetchSpecialReservations();
+    await fetchContactForms();
     
     // Create overlay for mobile menu
     const overlay = document.createElement('div');
@@ -517,6 +601,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             <li><a href="#" data-section="promo-codes"><i class="fas fa-tag"></i> Promo Codes</a></li>
             <li><a href="#" data-section="assigned-promos"><i class="fas fa-list-check"></i> Assigned Promos</a></li>
             <li><a href="#" data-section="special-reservations"><i class="fas fa-star"></i> Special Reservations</a></li>
+            <li><a href="#" data-section="contact-forms"><i class="fas fa-envelope"></i> Contact Forms</a></li>
         </ul>
         <div class="auth-buttons">
             <button class="btn btn-outline" id="logout-btn-mobile"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -561,11 +646,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.getElementById('totalStudents').textContent = students.length;
     document.getElementById('totalPurchase').textContent = purchases.length;
     document.getElementById('totalReservations').textContent = specialReservations.length;
+    document.getElementById('totalContactForms').textContent = contactForms.length;
     populateStudentTable();
     populatePurchaseTable();
     populatePromoCodes();
     populateAssignedPromos();
     populateSpecialReservations();
+    populateContactForms();
 });
 
 // Load student info from API
@@ -658,13 +745,13 @@ async function fetchSpecialReservations() {
     try {
         const response = await fetch('/adminPanel/specialReservations');
         const data = await response.json();
-        console.log(data);
-        console.log(data[0].extra_info);
+        // console.log(data);
+        // console.log(data[0].extra_info);
 
         // Assuming the API returns an array of reservation objects
         data.forEach(reservation => {
             let name = reservation.extra_info[0].first_name + ' ' + reservation.extra_info[0].last_name;
-            console.log();
+            // console.log();
             specialReservations.push({
                 id: reservation._id,
                 name: name,
@@ -686,6 +773,30 @@ async function fetchSpecialReservations() {
 
     } catch (error) {
         console.error('Error fetching special reservations:', error);
+    }
+}
+
+// Fetch contact forms from API
+async function fetchContactForms() {
+    try {
+        const response = await fetch('/adminPanel/contactUsForms');
+        const data = await response.json();
+        
+        
+        // Assuming the API returns an array of contact form objects
+        data.forEach(form => {
+            // console.log(form);
+            contactForms.push({
+                id: form._id,
+                name: form.name,
+                phone: form.phone,
+                email: form.email,
+                message: form.message
+            });
+        });
+
+    } catch (error) {
+        console.error('Error fetching contact forms:', error);
     }
 }
 
@@ -714,5 +825,3 @@ errorPopup.addEventListener('click', function(e) {
         hideError();
     }
 });
-
-

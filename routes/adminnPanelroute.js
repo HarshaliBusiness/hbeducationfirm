@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {db, supabase} = require('../database/db');
-const {User, promoCode, Pdf, specialReservation} = require('../database/schema');
+const {User, promoCode, Pdf, specialReservation, contactUs} = require('../database/schema');
 
 router.get('/',(req,res)=>{
   res.render('adminPanel');
@@ -38,7 +38,6 @@ router.delete('/deleteReservation/:Id', async (req, res) => {
     res.status(500).json({ success: false,error: 'Server error' });
   }
 });
-
 
 router.get('/studentInformation',async (req,res)=>{
   try {
@@ -107,5 +106,27 @@ router.post('/assignPromoCode', async (req, res) => {
   }
 });
 
+router.get('/contactUsForms',async (req,res)=>{
+  try {
+
+    const data = await contactUs.find({});
+    // console.log(data);
+    res.json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.delete('/deleteContactForm/:Id', async (req, res) => {
+  try {
+    const result = await contactUs.findByIdAndDelete(req.params.Id);
+    if (!result) {
+      return res.status(404).json({success: false, message: 'User not found' });
+    }
+    res.json({ success: true,message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false,error: 'Server error' });
+  }
+});
 
 module.exports = router;
