@@ -310,24 +310,31 @@ async function proceedToPayment() {
             });
 
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
 
             if(data.iserr){
                 showError(data.msg);
             }else{
                 window.location.href = '/prefernceListPCM';
             }
+        }else{
+            const response = await fetch('/pcm/paymentType', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({selectedPlan})
+            });
+
+            const data = await response.json();
+            // console.log(data);
+            if(data.iserr){
+                showError(data.msg);
+            }else{
+                window.location.href = '/prefernceListPCM';
+            }
+
         }
-        
-        // if (!selectedPlan) {
-        //     alert('Please select a plan first');
-        //     return;
-        // }
-        
-        // const planName = selectedPlan === 'basic' ? 'Basic Plan (₹500)' : 'Premium Plan (₹1000)';
-        // alert(`Redirecting to payment gateway for ${planName}`);
-        
-            
     } catch (error) {
         console.log(error);
     }

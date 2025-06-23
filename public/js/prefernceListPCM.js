@@ -51,6 +51,7 @@ document.getElementById('back_to_pcm').addEventListener('click',()=>{
 document.addEventListener("DOMContentLoaded", initilise);
 
 async function initilise() {
+    document.getElementById('generate_college_list').style.display = 'block';
     await fetchBranches();
     await fetchCity();
     await fetchUniversity();
@@ -317,77 +318,204 @@ async function fetchUniversity() {
     }
 }
 
-// College List Functions
+
+// Add these DOM elements at the top with your other DOM elements
+const paymentSuccessModal = document.getElementById('paymentSuccessModal');
+const paymentErrorModal = document.getElementById('paymentErrorModal');
+const errorMessage = document.getElementById('errorMessage');
+const continueAfterPayment = document.getElementById('continueAfterPayment');
+const retryPayment = document.getElementById('retryPayment');
+const closeModalButtons = document.querySelectorAll('.close-modal');
+
+// Add event listeners for modal close buttons
+closeModalButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    paymentSuccessModal.style.display = 'none';
+    paymentErrorModal.style.display = 'none';
+  });
+});
+
+// Close modals when clicking outside
+window.addEventListener('click', (e) => {
+  if (e.target === paymentSuccessModal) {
+    paymentSuccessModal.style.display = 'none';
+  }
+  if (e.target === paymentErrorModal) {
+    paymentErrorModal.style.display = 'none';
+  }
+});
+
+// Updated generateCollegeList function
 async function generateCollegeList(formData) {
     try {
-
         collegeCardsContainer.innerHTML = '';
+        
+        // Handle special reservation case
         if (central_object.specialReservation != 'No') {
             document.getElementById('downloadPdfBtn').style.display = 'none';
-            // console.log(formData);
-            // console.log(central_object.specialReservation);
             let exam_type = 'Engineering';
             let special_reservation = central_object.specialReservation;
+            
             const response = await fetch('/prefernceListPCM/specialReservationMsg', {
                 method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({formData, special_reservation, exam_type})
             });
 
             const data = await response.json();
-            if(data.isSave){
-                collegeCardsContainer.innerHTML = `
-                    <div class="contact-message">
-                        <h3>Thank you for your application!</h3>
-                        <p>Our team will contact you within 24 hours regarding your special reservation.</p>
-                    </div>
-                `;
-                resultsContainer.style.display = 'block';
-            }else{
-                collegeCardsContainer.innerHTML = `
-                    <div class="contact-message">
-                        <h3>Thank you for your application!</h3>
-                        <p>Internal server error.</p>
-                    </div>
-                `;
-                resultsContainer.style.display = 'block';
-            }
+            
+            collegeCardsContainer.innerHTML = `
+                <div class="contact-message">
+                    <h3>Thank you for your application!</h3>
+                    <p>${data.isSave ? 
+                        'Our team will contact you within 24 hours regarding your special reservation.' : 
+                        'Internal server error.'}</p>
+                </div>
+            `;
+            resultsContainer.style.display = 'block';
             return;
         }
 
-        const response_1 = await fetch('/payment');
-        const data_1 = await response_1.json();
-        // console.log(data_1);
-
-        if(data_1.isOk){
-
-            const response = await fetch('/prefernceListPCM/College_list', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
-
-            const response_2 = await fetch('/prefernceListPCM/student_name');
-            const data_2 = await response_2.json();
-            central_object.name = data_2.name;
-
-            central_object.final_college_list = data;
-            generatePdfList();
-            await savepdfintodatabase();
-            displayColleges(data, formData);
-
-        }else{
-            alert(data_1.msg);
+        // Handle payment flow
+        const paymentResponse = await fetch('/payment');
+        const paymentData = await paymentResponse.json();
+        
+        if(!paymentData.isOk) {
+            showErrorModal(paymentData.msg || 'Failed to initialize payment');
+            return;
         }
 
+        // If no payment needed (promo code case)
+        if(paymentData.order === '') {
+            showSuccessCodeModal();
+            await processCollegeList(formData);
+            return;
+        }
+
+        // Store formData for retry functionality
+        let currentFormData = formData;
+        
+        // Setup payment handler
+        const handlePayment = async () => {
+            const paymentPromise = new Promise((resolve, reject) => {
+                const options = {
+                    key: "rzp_test_MrwlI2gihncL5U",
+                    amount: paymentData.order.amount,
+                    currency: paymentData.order.currency,
+                    name: "HB Educational Firm",
+                    description: "Basic Plan",
+                    order_id: paymentData.order.id,
+                    handler: async function(response) {
+                        try {
+                            const verifyRes = await fetch("/payment/verify-payment", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(response)
+                            });
+
+                            const verifyData = await verifyRes.json();
+                            if(verifyData.isOk) {
+                                showSuccessModal();
+                                resolve(true);
+                            } else {
+                                throw new Error(verifyData.msg || 'Payment verification failed');
+                            }
+                        } catch (error) {
+                            reject(error);
+                        }
+                    },
+                    prefill: {
+                        name: "Test User",
+                        email: "test@example.com",
+                        contact: "9876543210"
+                    },
+                    theme: { color: "#3399cc" },
+                    modal: {
+                        ondismiss: function() {
+                            reject(new Error('Payment window closed'));
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+            });
+
+            try {
+                await paymentPromise;
+                await processCollegeList(currentFormData);
+            } catch (error) {
+                showErrorModal(error.message);
+            }
+        };
+
+        // Start payment process
+        await handlePayment();
+
+        // Retry payment button handler
+        retryPayment.onclick = () => {
+            paymentErrorModal.style.display = 'none';
+            handlePayment();
+        };
+
+        // Continue button handler (in case they close success modal early)
+        continueAfterPayment.onclick = () => {
+            paymentSuccessModal.style.display = 'none';
+            // processCollegeList(currentFormData);
+        };
+
     } catch (error) {
-        console.log('Error:', error);
+        console.error('Error:', error);
+        showErrorModal(error.message || 'An error occurred during payment processing');
+    }
+}
+
+// Helper functions for showing modals
+function showSuccessModal() {
+    document.getElementById('show_Success_Modal_h3').textContent = 'Payment Successful!';
+    document.getElementById('show_Success_Modal_p').textContent = 'Your payment has been processed successfully. Please wait a few seconds.';
+    document.getElementById('continueAfterPayment').style.display = 'block';
+    paymentSuccessModal.style.display = 'block';
+}
+
+function showSuccessCodeModal() {
+    document.getElementById('show_Success_Modal_h3').textContent = 'Code used..';
+    document.getElementById('show_Success_Modal_p').textContent = 'Please wait a few seconds.';
+    document.getElementById('continueAfterPayment').style.display = 'none';
+    paymentSuccessModal.style.display = 'block';
+}
+
+
+function showErrorModal(message) {
+    errorMessage.textContent = message;
+    paymentErrorModal.style.display = 'block';
+}
+
+
+async function processCollegeList(formData) {
+    try {
+        const response = await fetch('/prefernceListPCM/College_list', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        // Get student name
+        const nameResponse = await fetch('/prefernceListPCM/student_name');
+        const nameData = await nameResponse.json();
+        central_object.name = nameData.name;
+
+        // Process results
+        central_object.final_college_list = data;
+        generatePdfList();
+        await savepdfintodatabase();
+        displayColleges(data, formData);
+        document.getElementById('generate_college_list').style.display = 'none';
+    } catch (error) {
+        console.error('Error processing college list:', error);
+        throw error;
     }
 }
 

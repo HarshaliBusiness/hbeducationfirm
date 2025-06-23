@@ -1219,6 +1219,9 @@ router.post('/savePdf',upload.single('pdf'),async (req,res)=>{
             pdf: pdfBuffer
         });
         await newPreferenceList.save();
+        req.session.user.payment = '';
+        req.session.user.promoCode = '';
+        console.log(req.session.user);
         res.json({ 
             success: true,
             message: 'PDF stored successfully'

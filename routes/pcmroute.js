@@ -136,4 +136,17 @@ router.post('/checkCode', async (req,res)=>{
   }
 });
 
+router.post('/paymentType', async (req,res)=>{
+
+  try {
+    const {selectedPlan} = req.body;
+    // console.log(selectedPlan);
+    req.session.user.payment = selectedPlan;
+    return res.json({msg:'Sucssesfully updated.',iserr: false});
+
+  } catch (error) {
+    console.log(error);
+    return res.json({msg : 'Server error. Try later.', iserr : true});
+  }
+});
 module.exports = router;

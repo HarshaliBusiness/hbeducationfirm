@@ -164,7 +164,7 @@
                     </select>
                 </div> -->
 
-                <button type="submit" class="submit-btn">Generate College List</button>
+                <button type="submit" class="submit-btn" id="generate_college_list">Generate College List</button>
             </form>
 
             <div class="results-container" id="resultsContainer">
@@ -199,6 +199,26 @@
         </main>
     </div>
 
+    <!-- Payment Success Modal -->
+    <div id="paymentSuccessModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3 id="show_Success_Modal_h3"></h3>
+        <p id="show_Success_Modal_p"></p>
+        <button id="continueAfterPayment" class="modal-btn">Continue</button>
+    </div>
+    </div>
+
+    <!-- Payment Error Modal -->
+    <div id="paymentErrorModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Payment Error</h3>
+        <p id="errorMessage">An error occurred during payment processing.</p>
+        <button id="retryPayment" class="modal-btn">Try Again</button>
+    </div>
+    </div>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
