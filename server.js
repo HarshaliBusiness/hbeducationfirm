@@ -104,6 +104,15 @@ app.use('/payment',paymentRoutes);
 const privacyPolicyRoutes = require('./routes/privacyPolicyroute'); 
 app.use('/privacyPolicy',privacyPolicyRoutes);
 
+const termsAndConditionsRoutes = require('./routes/termsAndConditionsroute'); 
+app.use('/termsAndConditions',termsAndConditionsRoutes);
+
+const refundPolicyRoutes = require('./routes/refundPolicyroute'); 
+app.use('/refundPolicy',refundPolicyRoutes);
+
+const contactUsRoutes = require('./routes/contactUsroute'); 
+app.use('/contactUs',contactUsRoutes);
+
 const adminPanelRoutes = require('./routes/adminnPanelroute'); 
 app.use('/adminPanel',adminPanelRoutes);
 

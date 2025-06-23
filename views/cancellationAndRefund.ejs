@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HB Educational Firm</title>
+    <link rel="icon" href="/assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Glacial Indifference', sans-serif;
+        }
+
+        body {
+            background-color: #0a0a1a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1a3a8f;
+            border-radius: 4px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a3a8f 100%);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: #4a90e2;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #4a90e2;
+            color: #4a90e2;
+        }
+
+        .btn-outline:hover {
+            background: #4a90e2;
+            color: #ffffff;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Policy Section */
+        .policy-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .policy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .policy-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #4a90e2, #6a5acd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .policy-header p {
+            color: #b8c2d8;
+            font-size: 1.1rem;
+        }
+
+        .policy-content {
+            background: rgba(26, 58, 143, 0.1);
+            border: 1px solid #1a3a8f;
+            border-radius: 10px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .policy-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .policy-section h2 {
+            color: #4a90e2;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .policy-section p {
+            color: #b8c2d8;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .policy-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #b8c2d8;
+        }
+
+        .policy-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .note {
+            background: rgba(26, 58, 143, 0.3);
+            border-left: 4px solid #4a90e2;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .note p {
+            margin-bottom: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a1a;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid #1a1a3a;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .footer-links a {
+            color: #b8c2d8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #4a90e2;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: #b8c2d8;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #4a90e2;
+        }
+
+        .copyright {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .policy-container {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .policy-header h1 {
+                font-size: 2rem;
+            }
+
+            .policy-content {
+                padding: 1.5rem;
+            }
+
+            .footer-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">HB <span>Educational</span>Firm</a>
+            <button class="btn btn-outline" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="policy-container fade-in">
+        <div class="policy-header">
+            <h1>Cancellation & Refund Policy</h1>
+        </div>
+
+        <div class="policy-content">
+            <div class="policy-section">
+                <p>HB EDUCATIONAL FIRM and HARSHALI SANJAY BHANDARI believes in helping its customers as far as possible, and has therefore a liberal cancellation policy for our digital products (Preference List PDF). Please review the following policy carefully.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Digital Product Cancellation</h2>
+                <p>Since our product is a digital download (Preference List PDF), please note the following:</p>
+                <ul>
+                    <li>Cancellations will be considered only if the request is made within 24 hours of placing the order.</li>
+                    <li>Once the digital product has been downloaded or accessed by the customer, we cannot accept any cancellation request.</li>
+                    <li>To request a cancellation, please contact our customer service team with your order details.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h2>Refund Policy</h2>
+                <p>Refunds for our digital product (Preference List PDF) are handled under the following conditions:</p>
+                <ul>
+                    <li>Refund requests must be made within 48 hours of purchase.</li>
+                    <li>Refunds will only be issued if the digital product has not been downloaded or accessed.</li>
+                    <li>If you receive a damaged or corrupted file, please report it immediately to our customer service for a replacement.</li>
+                    <li>If you feel the product received is not as described on our site, you must bring it to our notice within 48 hours of purchase.</li>
+                </ul>
+                
+                <div class="note">
+                    <p><strong>Note:</strong> Refund requests based on "changed my mind" or "not what I expected" will not be entertained after the product has been downloaded.</p>
+                </div>
+            </div>
+
+            <div class="policy-section">
+                <h2>Processing Refunds</h2>
+                <p>In case of any refunds approved by HB EDUCATIONAL FIRM and HARSHALI SANJAY BHANDARI, it will take 6-8 business days for the refund to be processed to the original payment method.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Contact Us</h2>
+                <p>If you have any questions about our Cancellation and Refund Policy, please contact us:</p>
+                <ul>
+                    <li>By email: harshalibusiness2430@gmail.com</li>
+                    <li>By phone: +91 9970303771</li>
+                    <li>Through our website contact form</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+           <a href="https://www.instagram.com/harshali_bhandari_2430/"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/harshali-bhandari-148232218/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.youtube.com/@HB_Educational_Firm"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="#" onclick="window.location.href = '/'" >Home</a>
+            <a href="#" onclick="window.location.href = '/contactUs'" >Contact</a>
+            <a href="#" onclick="window.location.href = '/privacyPolicy'">Privacy Policy</a>
+            <a href="#"  onclick="window.location.href = '/termsAndConditions'">Terms and Conditions</a>
+            <a href="#" onclick="window.location.href = '/refundPolicy'" >Refund Policy</a>
+        </div>
+        <p class="copyright">© 2025 HB Educational Firm. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Simple back to top button functionality
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        // Mobile menu functionality (if needed)
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const overlay = document.querySelector('.overlay');
+            const closeMenuBtn = document.querySelector('.close-menu-btn');
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.add('active');
+                    overlay.classList.add('active');
+                });
+            }
+
+            if (closeMenuBtn) {
+                closeMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            }
+
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 
 const mongoose = require('mongoose');
+const { Message } = require('twilio/lib/twiml/MessagingResponse');
 
 const userSchema = new mongoose.Schema({
     email : String,
@@ -49,12 +50,20 @@ const specialReservationSchema = new mongoose.Schema({
   specialReservation: String
 });
 
+const contactUsSchema = new mongoose.Schema({
+  name: String,
+  phone: String,
+  email: String,
+  message: String
+});
+
 const Pdf = mongoose.model('Pdf', pdfSchema);
 const User = mongoose.model('User', userSchema);
 const promoCode = mongoose.model('promoCode',promoCodeSchema);
 const specialReservation = mongoose.model('specialReservation', specialReservationSchema);
+const contactUs = mongoose.model('contactUs',contactUsSchema);
 
-module.exports = {User, promoCode, Pdf,specialReservation};
+module.exports = {User, promoCode, Pdf,specialReservation, contactUs};
 
 
 

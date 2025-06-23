@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HB Educational Firm</title>
     <link rel="icon" href="/assets/logo.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Glacial+Indifference:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* CSS Reset and Base Styles */
@@ -66,83 +65,21 @@
             color: #4a90e2;
         }
 
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
+        .back-button {
             padding: 0.6rem 1.2rem;
             border-radius: 4px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            border: none;
-        }
-
-        .btn-outline {
             background: transparent;
             border: 1px solid #4a90e2;
             color: #4a90e2;
+            text-decoration: none;
         }
 
-        .btn-outline:hover {
+        .back-button:hover {
             background: #4a90e2;
             color: #ffffff;
-        }
-
-        .btn-primary {
-            background: #4a90e2;
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            background: #3a7bc8;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Mobile Menu Styles */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -250px;
-            width: 250px;
-            height: 100vh;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a3a8f 100%);
-            z-index: 2000;
-            transition: right 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .mobile-menu.active {
-            right: 0;
-        }
-
-        .mobile-menu .auth-buttons {
-            flex-direction: column;
-            margin-top: 2rem;
-            gap: 1rem;
-        }
-
-        .close-menu-btn {
-            align-self: flex-start;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            margin-bottom: 2rem;
         }
 
         /* Privacy Policy Content */
@@ -152,130 +89,48 @@
             padding: 8rem 2rem 4rem;
         }
 
-        .privacy-header {
+        .privacy-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #4a90e2;
             text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .privacy-header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #4a90e2, #6a5acd);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .privacy-header p {
-            color: #b8c2d8;
-            font-size: 1.1rem;
         }
 
         .privacy-content {
             background: rgba(26, 58, 143, 0.1);
             border-radius: 10px;
-            padding: 2.5rem;
-            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border: 1px solid #1a3a8f;
         }
 
-        .privacy-section {
-            margin-bottom: 2.5rem;
-        }
-
-        .privacy-section h2 {
-            font-size: 1.5rem;
+        .privacy-content h2 {
             color: #4a90e2;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #1a3a8f;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.8rem;
         }
 
-        .privacy-section h3 {
-            font-size: 1.2rem;
-            margin: 1.5rem 0 0.8rem;
-            color: #ffffff;
-        }
-
-        .privacy-section p, .privacy-section ul {
+        .privacy-content h3 {
             color: #b8c2d8;
-            margin-bottom: 1rem;
-            line-height: 1.7;
+            margin: 1.2rem 0 0.8rem;
+            font-size: 1.4rem;
         }
 
-        .privacy-section ul {
+        .privacy-content p, .privacy-content ul {
+            margin-bottom: 1rem;
+            color: #b8c2d8;
+        }
+
+        .privacy-content ul {
             padding-left: 2rem;
         }
 
-        .privacy-section li {
+        .privacy-content li {
             margin-bottom: 0.5rem;
         }
 
-        /* Contact Form Styles */
-        .contact-form {
-            margin-top: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
+        .highlight {
             color: #ffffff;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 4px;
-            border: 1px solid #1a3a8f;
-            background: rgba(26, 58, 143, 0.2);
-            color: #ffffff;
-        }
-
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            background: #4a90e2;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
             font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .submit-btn:hover {
-            background: #3a7bc8;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .contact-card {
-            flex: 1;
-            min-width: 200px;
-            background: rgba(26, 58, 143, 0.1);
-            border-radius: 8px;
-            padding: 1.5rem;
-            border: 1px solid #1a3a8f;
-        }
-
-        .contact-card i {
-            font-size: 1.5rem;
-            color: #4a90e2;
-            margin-bottom: 1rem;
         }
 
         /* Footer */
@@ -303,140 +158,47 @@
             color: #4a90e2;
         }
 
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .footer-links a {
+            color: #b8c2d8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #4a90e2;
+        }
+
         .copyright {
             color: #6b7280;
             font-size: 0.9rem;
         }
 
-        /* Overlay for mobile menu */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1500;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Tabs Styling */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding: 0 2rem;
-        }
-        
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 2px solid white;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logout-btn:hover {
-            background: #4a90e2;
-        }
-
-        .tab-btn {
-            padding: 0.8rem 1.5rem;
-            background: rgba(26, 58, 143, 0.2);
-            border: 1px solid #1a3a8f;
-            color: #b8c2d8;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .tab-btn:hover {
-            background: rgba(26, 58, 143, 0.4);
-        }
-
-        .tab-btn.active {
-            background: #1a3a8f;
-            color: #ffffff;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Icon styles for policy sections */
-        .privacy-section h2 i {
-            margin-right: 0.5rem;
-            color: #4a90e2;
-        }
-
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .auth-buttons.desktop {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
             .privacy-container {
-                padding: 6rem 1rem 3rem;
+                padding: 6rem 1.5rem 3rem;
             }
-
-            .privacy-header h1 {
+            
+            .privacy-title {
                 font-size: 2rem;
             }
-
+            
             .privacy-content {
                 padding: 1.5rem;
             }
-
-            .privacy-section h2 {
-                font-size: 1.3rem;
-            }
-
-            .tabs {
-                flex-direction: column;
-                align-items: center;
-            }
             
-            .tab-btn {
-                width: 100%;
-                justify-content: center;
+            .footer-links {
+                gap: 1rem;
+                font-size: 0.9rem;
             }
-
-            .contact-info {
-                flex-direction: column;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -444,312 +206,86 @@
     <header>
         <nav>
             <a href="#" class="logo">HB <span>Educational</span>Firm</a>
-            <button class="logout-btn">
-                <span>Back</span>
-            </button>
+            <a href="#" onclick="window.history.back()" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
         </nav>
     </header>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="close-menu-btn" onclick="closeMobileMenu()">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="auth-buttons">
-            <button class="btn btn-outline" onclick="openLoginModal()">Login</button>
-            <button class="btn btn-primary" onclick="openRegisterModal()">Register</button>
-        </div>
-    </div>
-    <div class="overlay" id="overlay" onclick="closeMobileMenu()"></div>
-
     <main class="privacy-container">
-        <div class="privacy-header">
-            <h1>Privacy & Policies</h1>
-            <!-- <p>Effective Date: 1st January 2025</p> -->
-        </div>
-
-        <div class="tabs">
-            <button class="tab-btn active" onclick="openTab('privacy')"><i class="fas fa-user-shield"></i> Privacy</button>
-            <button class="tab-btn" onclick="openTab('shipping')"><i class="fas fa-truck"></i> Shipping</button>
-            <button class="tab-btn" onclick="openTab('cancellation')"><i class="fas fa-ban"></i> Cancellation</button>
-            <button class="tab-btn" onclick="openTab('refund')"><i class="fas fa-money-bill-wave"></i> Refund</button>
-            <button class="tab-btn" onclick="openTab('contact')"><i class="fas fa-envelope"></i> Contact</button>
-        </div>
-
-        <!-- Privacy Policy Tab -->
-        <div id="privacy" class="tab-content active">
-            <div class="privacy-content">
-                <div class="privacy-section">
-                    <p>At EduPath, your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you use our website and services, specifically related to admission counseling for Engineering, Pharmacy, BBA, BMS, BCA, NEET, and Medical courses.</p>
-                    <p>By using our website, you agree to the terms of this Privacy Policy.</p>
-                </div>
-
-                <div class="privacy-section">
-                    <h2>1. Eligibility</h2>
-                    <p>Our services are intended for individuals those who have completed Class 12 (HSC or equivalent). By using our website, you confirm that you meet this requirement.</p>
-                </div>
-
-                <div class="privacy-section">
-                    <h2>2. Information We Collect</h2>
-                    
-                    <h3>2.1 Personal Information</h3>
-                    <p>We may collect the following data when you interact with our website:</p>
-                    <ul>
-                        <li>Full Name</li>
-                        <li>Email Address</li>
-                        <li>Phone Number</li>
-                        <li>Academic Information (Stream, Board, Rank, Percentile, etc.)</li>
-                        <li>Payment Information (processed via third-party gateways)</li>
-                        <li>IP Address and Device Info</li>
-                    </ul>
-                    
-                    <h3>2.2 Non-Personal Information</h3>
-                    <ul>
-                        <li>Browser type and version</li>
-                        <li>Pages visited</li>
-                        <li>Time and date of visit</li>
-                        <li>Referral links</li>
-                    </ul>
-                </div>
-                <!-- Continue with other privacy sections -->
-            </div>
-        </div>
-
-        <!-- Shipping Policy Tab -->
-        <div id="shipping" class="tab-content">
-            <div class="privacy-content">
-                <div class="privacy-section">
-                    <h2><i class="fas fa-truck"></i> Delivery of Digital Products</h2>
-                    <p>Since we deal exclusively in digital products and services (such as preference lists, counseling sessions, and digital resources), no physical shipping is involved.</p>
-                    
-                    <h3>Delivery Timeframes</h3>
-                    <ul>
-                        <li>After successful payment, digital products like preference lists are delivered instantly or within 1 to 12 hours to your registered email address or available for download via your user dashboard.</li>
-                        <li>For personalized services like counseling sessions, our team will contact you within 24 hours to schedule the session or begin the process.</li>
-                    </ul>
-                    
-                    <h3>Non-Receipt of Products</h3>
-                    <p>If you do not receive your digital product within 24 hours, please contact us immediately at <strong>harshalibusiness2430@gmail.com</strong> or call <strong>+91-99703 03771</strong>.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cancellation Policy Tab -->
-        <div id="cancellation" class="tab-content">
-            <div class="privacy-content">
-                <div class="privacy-section">
-                    <h2><i class="fas fa-ban"></i> Order Cancellation</h2>
-                    <p>As our products are digital and personalized, orders cannot be canceled once the payment is successfully processed.</p>
-                    
-                    <h3>Exceptions</h3>
-                    <p>If you've accidentally made a payment or submitted incorrect information, please contact us within 1 hour of purchase. We will review the request and try to assist based on the service status.</p>
-                    
-                    <h3>Contact for Cancellation Requests</h3>
-                    <p>Email: <strong>harshalibusiness2430@gmail.com</strong> with your order details and reason for cancellation request.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Refund Policy Tab -->
-        <div id="refund" class="tab-content">
-            <div class="privacy-content">
-                <div class="privacy-section">
-                    <h2><i class="fas fa-money-bill-wave"></i> Refund Eligibility</h2>
-                    <p>We strive to offer high-quality, accurate, and value-driven services. However, we understand there may be certain circumstances under which a refund might be requested:</p>
-                    
-                    <h3>Refund Conditions</h3>
-                    <ul>
-                        <li>You have not received the digital product or service within the committed timeframe (12–24 hours).</li>
-                        <li>The product delivered was not as described or was significantly inaccurate based on your provided academic details.</li>
-                        <li>You were charged multiple times for the same order due to a payment gateway error.</li>
-                    </ul>
-                    
-                    <h3>Non-Refundable Cases</h3>
-                    <ul>
-                        <li>Refunds will not be issued for delivered digital products like preference lists or completed counseling sessions.</li>
-                        <li>Change of mind, wrong purchase, or incorrect data provided by the user does not qualify for a refund.</li>
-                    </ul>
-                    
-                    <h3>Refund Process</h3>
-                    <p>To request a refund, please email <strong>harshalibusiness2430@gmail.com</strong> with:</p>
-                    <ul>
-                        <li>Your full name</li>
-                        <li>Contact number</li>
-                        <li>Email</li>
-                        <li>Date of purchase</li>
-                        <li>Reason for refund request</li>
-                    </ul>
-                    <p>Refunds (if approved) will be processed within 3–5 business days and credited via the original method of payment.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contact Us Tab -->
-        <div id="contact" class="tab-content">
-            <div class="privacy-content">
-                <div class="privacy-section">
-                    <h2><i class="fas fa-envelope"></i> Contact Us</h2>
-                    <p>Have questions or need assistance? We're here to help! Reach out to us through any of the following methods:</p>
-                    
-                    <div class="contact-info">
-                        <div class="contact-card">
-                            <i class="fas fa-envelope"></i>
-                            <h3>Email</h3>
-                            <p>harshalibusiness2430@gmail.com</p>
-                            <p>For general inquiries and support</p>
-                        </div>
-                        
-                        <div class="contact-card">
-                            <i class="fas fa-phone"></i>
-                            <h3>Phone</h3>
-                            <p>+91-99703 03771</p>
-                            <p>Mon-Sat, 10AM to 8PM</p>
-                        </div>
-                        
-                        <!-- <div class="contact-card">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <h3>Office</h3>
-                            <p>Office No. 12, XYZ Complex</p>
-                            <p>Pune, Maharashtra - 411001</p>
-                        </div> -->
-                    </div>
-                    
-                    <!-- <div class="contact-form">
-                        <h3>Send us a message</h3>
-                        <form id="contactForm">
-                            <div class="form-group">
-                                <label for="name">Your Name</label>
-                                <input type="text" id="name" name="name" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="subject">Subject</label>
-                                <select id="subject" name="subject" required>
-                                    <option value="">Select a subject</option>
-                                    <option value="general">General Inquiry</option>
-                                    <option value="technical">Technical Support</option>
-                                    <option value="refund">Refund Request</option>
-                                    <option value="feedback">Feedback/Suggestions</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea id="message" name="message" required></textarea>
-                            </div>
-                            
-                            <button type="submit" class="submit-btn">Send Message</button>
-                        </form>
-                    </div> -->
-                </div>
-            </div>
+        <h1 class="privacy-title">Privacy Policy</h1>
+        
+        <div class="privacy-content">
+            <p>This privacy policy sets out how HB EDUCATIONAL FIRM and HARSHALI SANJAY BHANDARI uses and protects any information that you give HB EDUCATIONAL FIRM and HARSHALI SANJAY BHANDARI when you visit their website and/or agree to purchase from them.</p>
+            
+            <p>HB EDUCATIONAL FIRM and HARSHALI SANJAY BHANDARI is committed to ensuring that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using this website, and then you can be assured that it will only be used in accordance with this privacy statement.</p>
+            
+            <p>HB EDUCATIONAL FIRM and HARSHALI SANJAY BHANDARI may change this policy from time to time by updating this page. You should check this page from time to time to ensure that you adhere to these changes.</p>
+            
+            <h2>We may collect the following information:</h2>
+            <ul>
+                <li>Name</li>
+                <li>Contact information including email address</li>
+                <li>Demographic information such as postcode, preferences and interests, if required</li>
+                <li>Other information relevant to customer surveys and/or offers</li>
+            </ul>
+            
+            <h2>What we do with the information we gather</h2>
+            <p>We require this information to understand your needs and provide you with a better service, and in particular for the following reasons:</p>
+            <ul>
+                <li>Internal record keeping.</li>
+                <li>We may use the information to improve our products and services.</li>
+                <li>We may periodically send promotional emails about new products, special offers or other information which we think you may find interesting using the email address which you have provided.</li>
+                <li>From time to time, we may also use your information to contact you for market research purposes. We may contact you by email, phone, fax or mail.</li>
+                <li>We may use the information to customise the website according to your interests.</li>
+            </ul>
+            
+            <h2>Security</h2>
+            <p>We are committed to ensuring that your information is secure. In order to prevent unauthorised access or disclosure we have put in suitable measures.</p>
+            
+            <h2>How we use cookies</h2>
+            <p>A cookie is a small file which asks permission to be placed on your computer's hard drive. Once you agree, the file is added and the cookie helps analyze web traffic or lets you know when you visit a particular site. Cookies allow web applications to respond to you as an individual. The web application can tailor its operations to your needs, likes and dislikes by gathering and remembering information about your preferences.</p>
+            
+            <p>We use traffic log cookies to identify which pages are being used. This helps us analyze data about webpage traffic and improve our website in order to tailor it to customer needs. We only use this information for statistical analysis purposes and then the data is removed from the system.</p>
+            
+            <p>Overall, cookies help us provide you with a better website, by enabling us to monitor which pages you find useful and which you do not. A cookie in no way gives us access to your computer or any information about you, other than the data you choose to share with us.</p>
+            
+            <p>You can choose to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. This may prevent you from taking full advantage of the website.</p>
+            
+            <h2>Controlling your personal information</h2>
+            <p>You may choose to restrict the collection or use of your personal information in the following ways:</p>
+            <ul>
+                <li>whenever you are asked to fill in a form on the website, look for the box that you can click to indicate that you do not want the information to be used by anybody for direct marketing purposes</li>
+                <li>if you have previously agreed to us using your personal information for direct marketing purposes, you may change your mind at any time by writing to or emailing us at <span class="highlight">harshalibusiness2430@gmail.com</span></li>
+            </ul>
+            
+            <p>We will not sell, distribute or lease your personal information to third parties unless we have your permission or are required by law to do so. We may use your personal information to send you promotional information about third parties which we think you may find interesting if you tell us that you wish this to happen.</p>
+            
+            <p>If you believe that any information we are holding on you is incorrect or incomplete, please write to <span class="highlight">Laxmi Nagar Keshar Nivas lane number 2 House number 8 Old Sangvi Pune Pune MAHARASHTRA 411027</span> or contact us at <span class="highlight">9970303771</span> or <span class="highlight">harshalibusiness2430@gmail.com</span> as soon as possible. We will promptly correct any information found to be incorrect.</p>
+            
         </div>
     </main>
 
-    <footer>
+     <footer>
         <div class="social-links">
-            <!-- <a href="#"><i class="fab fa-facebook"></i></a> -->
-            <!-- <a href="#"><i class="fab fa-twitter"></i></a> -->
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <!-- <a href="#"><i class="fab fa-linkedin"></i></a> -->
-            <a href="#"><i class="fab fa-youtube"></i></a>
+           <a href="https://www.instagram.com/harshali_bhandari_2430/"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/harshali-bhandari-148232218/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.youtube.com/@HB_Educational_Firm"><i class="fab fa-youtube"></i></a>
         </div>
-        
-        <p class="copyright">© 2025 HB Educational Firm . All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#" onclick="window.location.href = '/'" >Home</a>
+            <a href="#" onclick="window.location.href = '/contactUs'" >Contact</a>
+            <a href="#" onclick="window.location.href = '/privacyPolicy'">Privacy Policy</a>
+            <a href="#"  onclick="window.location.href = '/termsAndConditions'">Terms and Conditions</a>
+            <a href="#" onclick="window.location.href = '/refundPolicy'" >Refund Policy</a>
+        </div>
+        <p class="copyright">© 2025 HB Educational Firm. All rights reserved.</p>
     </footer>
 
     <script>
-        // Mobile Menu Functions
-        function openMobileMenu() {
-            document.getElementById('mobileMenu').classList.add('active');
-            document.getElementById('overlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMobileMenu() {
-            document.getElementById('mobileMenu').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Tab Functionality
-        function openTab(tabName) {
-            // Hide all tab contents
-            const tabContents = document.getElementsByClassName('tab-content');
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove('active');
-            }
-            
-            // Remove active class from all tab buttons
-            const tabButtons = document.getElementsByClassName('tab-btn');
-            for (let i = 0; i < tabButtons.length; i++) {
-                tabButtons[i].classList.remove('active');
-            }
-            
-            // Show the current tab and mark button as active
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
-            
-            // Scroll to top of the tab content
-            document.getElementById(tabName).scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // Modal Functions
-        function openLoginModal() {
-            closeMobileMenu();
-            alert('Login modal would open here');
-        }
-
-        function openRegisterModal() {
-            closeMobileMenu();
-            alert('Register modal would open here');
-        }
-
-        // Contact Form Submission
-        // document.getElementById('contactForm').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-            
-        //     // Get form values
-        //     const name = document.getElementById('name').value;
-        //     const email = document.getElementById('email').value;
-        //     const subject = document.getElementById('subject').value;
-        //     const message = document.getElementById('message').value;
-            
-        //     // Here you would typically send this data to your server
-        //     // For now, we'll just show a success message
-        //     alert(`Thank you, ${name}! Your message has been sent. We'll contact you at ${email} soon regarding your ${subject} inquiry.`);
-            
-        //     // Reset the form
-        //     this.reset();
-        // });
-
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Close mobile menu when clicking on links
-            const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
-            mobileMenuLinks.forEach(link => {
-                link.addEventListener('click', closeMobileMenu);
-            });
-            
-            // Close menu when pressing Escape key
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    closeMobileMenu();
-                }
-            });
-            
-            // Set the first tab as active by default if none is active
-            if (!document.querySelector('.tab-btn.active')) {
-                document.querySelector('.tab-btn').classList.add('active');
-                document.querySelector('.tab-content').classList.add('active');
-            }
-        });
-        document.querySelector('.logout-btn').addEventListener('click', function() {
+        // Back button functionality
+        document.querySelector('.back-button').addEventListener('click', function(e) {
+            e.preventDefault();
             window.history.back();
         });
     </script>
