@@ -1165,7 +1165,7 @@ router.post('/College_list', async (req, res) => {
         }
 
         let colleges = await getColleges(formData);
-        colleges.sort((a, b) => b.points - a.points);
+        colleges.sort((a, b) => b.choice_points - a.choice_points);
         let college_counts;
         if(req.session.user.promoCode != ''){
             college_counts = 150;
@@ -1178,7 +1178,7 @@ router.post('/College_list', async (req, res) => {
         }
 
         colleges = colleges.slice(0,college_counts);
-        colleges.sort((a, b) => b.points - a.points);
+        colleges.sort((a, b) => b.choice_points - a.choice_points);
         // console.log(colleges);
         res.json(colleges);
     } catch (error) {
