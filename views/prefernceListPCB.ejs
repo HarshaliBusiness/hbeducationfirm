@@ -6,13 +6,13 @@
     <title>HB Educational Firm</title>
     <link rel="icon" href="/assets/logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Glacial+Indifference&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/prefernceListPCM.css">
+    <link rel="stylesheet" href="/css/prefernceListPCB.css">
 </head>
 <body>
     <header>
         <nav>
             <a href="#" class="logo">HB <span>Educational</span>Firm</a>
-            <button class="logout-btn" id="back_to_pcm">Back</button>
+            <button class="logout-btn" id="back_to_pcb">Back</button>
         </nav>
     </header>
 
@@ -33,11 +33,6 @@
                 <div class="form-group">
                     <label for="generalRank">Your General Rank</label>
                     <input type="number" id="generalRank" min="1" step="1" placeholder="Enter your general rank" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="generalRank">Your All India Rank</label>
-                    <input type="number" id="allIndiaRank" min="1" step="1" placeholder="Enter your all India rank" required>
                 </div>
 
                 <div class="form-group">
@@ -85,13 +80,6 @@
                     </select>
                 </div>
 
-                <div class="form-group" id="tfwsContainer">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="tfws">
-                        <span>TFWS (Tuition Fee Waiver Scheme)</span>
-                    </label>
-                </div>
-
                 <div class="form-group">
                     <label>Branch Category</label>
                     <div class="checkbox-group">
@@ -100,50 +88,16 @@
                             All
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="CIVIL" class="branch-checkbox">
-                            Civil
+                            <input type="checkbox" name="branchCategory" value="Pharm D ( Doctor of Pharmacy)" class="branch-checkbox">
+                            Pharm D ( Doctor of Pharmacy)
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="COMP" class="branch-checkbox">
-                            Computer Science
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="IT" class="branch-checkbox">
-                            Information Technology
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="COMPAI" class="branch-checkbox">
-                            CSE (Artificial Intelligence)
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="AI" class="branch-checkbox">
-                            Artificial Intelligence
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="ELECTRICAL" class="branch-checkbox">
-                            Electrical
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="ENTC" class="branch-checkbox">
-                            ENTC
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="MECH" class="branch-checkbox">
-                            Mechanical
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="branchCategory" value="OTHER" class="branch-checkbox" id="otherBranchCheckbox">
-                            Other
+                            <input type="checkbox" name="branchCategory" value="Pharmacy" class="branch-checkbox">
+                            Pharmacy
                         </label>
                     </div>
                 </div>
                 
-                <div class="form-group hidden" id="branchSelectionGroup">
-                    <label>Other Branch Selection</label>
-                    <button type="button" id="customBranchBtn" class="custom-branch-btn">+ Add Custom Branches</button>
-                    <div id="selectedBranchesContainer" class="selected-branches-container"></div>
-                    <select id="branch" class="hidden"></select>
-                </div>
 
                 <div class="form-group">
                     <label>City</label>
@@ -222,6 +176,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="/js/prefernceListPCM.js"></script>
+    <script src="/js/prefernceListPCB.js"></script>
 </body>
 </html>

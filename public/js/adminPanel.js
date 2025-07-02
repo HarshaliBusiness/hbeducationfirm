@@ -247,11 +247,16 @@ function populateSpecialReservations(searchQuery = '') {
         card.innerHTML = `
             <div class="reservation-card-header">
                 <div class="reservation-card-title">${reservation.name} (${reservation.phone})</div>
+
                 <button class="reservation-card-delete" data-id="${reservation.id}">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
             <div class="reservation-card-details">
+                <div class="reservation-card-detail">
+                    <span class="reservation-card-label">Exam</span>
+                    <span class="reservation-card-value">${reservation.examType}</span>
+                </div>
                 <div class="reservation-card-detail">
                     <span class="reservation-card-label">Email</span>
                     <span class="reservation-card-value">${reservation.email}</span>
@@ -689,7 +694,7 @@ async function student_info() {
     }
 }
 
-// Load student purchases from API
+
 async function student_purchases() {
     try {
         const response = await fetch('/adminPanel/studentPurchase');
@@ -754,6 +759,7 @@ async function fetchSpecialReservations() {
             // console.log();
             specialReservations.push({
                 id: reservation._id,
+                examType: reservation.examType,
                 name: name,
                 phone: reservation.phone_number,
                 email: reservation.extra_info[0].email,

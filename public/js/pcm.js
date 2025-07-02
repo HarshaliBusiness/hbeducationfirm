@@ -301,7 +301,7 @@ async function proceedToPayment() {
                 return;
             }
             const promo_code = promoCode;
-            const response = await fetch('/pcm/checkCode', {
+            const response = await fetch('/payment/checkCode', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -318,7 +318,7 @@ async function proceedToPayment() {
                 window.location.href = '/prefernceListPCM';
             }
         }else{
-            const response = await fetch('/pcm/paymentType', {
+            const response = await fetch('/payment/paymentType', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

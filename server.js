@@ -35,6 +35,7 @@ app.get('/',isLoggedIn, async(req,res)=>{
   res.redirect('/afterLoginPage');
 });
 
+// register and login
 const registerRoutes = require('./routes/registerroute'); 
 app.use('/register',registerRoutes);
 
@@ -44,6 +45,7 @@ app.use('/afterLoginPage',afterLoginPageRoutes);
 const loginRoutes = require('./routes/loginroute'); 
 app.use('/login',loginRoutes);
 
+// main pages
 const pcmRoutes = require('./routes/pcmroute'); 
 app.use('/pcm',pcmRoutes);
 
@@ -59,6 +61,7 @@ app.use('/bca',bcaRoutes);
 const neetRoutes = require('./routes/neetroute');
 app.use('/neet',neetRoutes);
 
+// College Predictor
 const collegePredictorPCMRoutes = require('./routes/collegePredictorPCMroute'); 
 app.use('/collegePredictorPCM',collegePredictorPCMRoutes);
 
@@ -74,6 +77,7 @@ app.use('/collegePredictorBCA',collegePredictorBCARoutes);
 const collegePredictorNeetRoutes = require('./routes/collegePredictorNeetroute'); 
 app.use('/collegePredictorNeet',collegePredictorNeetRoutes);
 
+// college Pages
 const collegePagePCMRoutes = require('./routes/collegePagePCMroute'); 
 app.use('/collegePagePCM',collegePagePCMRoutes);
 
@@ -89,18 +93,26 @@ app.use('/collegePageBCA',collegePageBCARoutes);
 const collegePageNeetRoutes = require('./routes/collegePageNeetroute'); 
 app.use('/collegePageNeet',collegePageNeetRoutes);
 
+// Branchwise cutoff
 const branchwiseCutoffPCMRoutes = require('./routes/branchwiseCutoffPCMroute'); 
 app.use('/branchwiseCutoffPCM',branchwiseCutoffPCMRoutes);
 
+// Preference list
 const prefernceListPCMRoutes = require('./routes/prefernceListPCMroute'); 
 app.use('/prefernceListPCM',prefernceListPCMRoutes);
 
+const prefernceListPCBRoutes = require('./routes/prefernceListPCBroute'); 
+app.use('/prefernceListPCB',prefernceListPCBRoutes);
+
+// Promocode
 const promoCodeRoutes = require('./routes/aapromocoderoute'); 
 app.use('/promoCode',promoCodeRoutes);
 
+//Payment
 const paymentRoutes = require('./routes/paymentroute'); 
 app.use('/payment',paymentRoutes);
 
+// Policy
 const privacyPolicyRoutes = require('./routes/privacyPolicyroute'); 
 app.use('/privacyPolicy',privacyPolicyRoutes);
 
@@ -113,9 +125,11 @@ app.use('/refundPolicy',refundPolicyRoutes);
 const contactUsRoutes = require('./routes/contactUsroute'); 
 app.use('/contactUs',contactUsRoutes);
 
+// admin panel
 const adminPanelRoutes = require('./routes/adminnPanelroute'); 
 app.use('/adminPanel',adminPanelRoutes);
 
+// profile
 const profileRoutes = require('./routes/profileroute'); 
 app.use('/profile',profileRoutes);
 

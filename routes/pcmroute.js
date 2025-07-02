@@ -114,39 +114,6 @@ router.get('/collegeNames', async (req, res) => {
   }
 });
 
-router.post('/checkCode', async (req,res)=>{
 
-  try {
 
-    const {promo_code} = req.body;
-    // console.log(promo_code);
-    
-    const code = await promoCode.findOne({ code : promo_code});
-    if(!code){
-      return res.json({msg:'Invalid code.',iserr: true});
-    }else if(code && code.count == 0){
-      return res.json({msg : 'Code limit is over.', iserr : true})
-    }else{
-      req.session.user.promoCode = promo_code;
-      // console.log(req.session.user);
-      return res.json({msg:'Sucssesfully updated.',iserr: false})
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-router.post('/paymentType', async (req,res)=>{
-
-  try {
-    const {selectedPlan} = req.body;
-    // console.log(selectedPlan);
-    req.session.user.payment = selectedPlan;
-    return res.json({msg:'Sucssesfully updated.',iserr: false});
-
-  } catch (error) {
-    console.log(error);
-    return res.json({msg : 'Server error. Try later.', iserr : true});
-  }
-});
 module.exports = router;

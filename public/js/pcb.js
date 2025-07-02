@@ -276,17 +276,66 @@ function selectPlan(planType) {
     }
 }
 
-function proceedToPayment() {
-    if (!selectedPlan) {
-        alert('Please select a plan first');
-        return;
-    }
+// Error Popup Functions
+function showError(message) {
+    const errorPopup = document.getElementById('errorPopup');
+    const errorMessage = document.getElementById('errorMessage');
     
-    const planName = selectedPlan === 'basic' ? 'Basic Plan (₹500)' : 'Premium Plan (₹1000)';
-    alert(`Redirecting to payment gateway for ${planName}`);
-    // In actual implementation, this would redirect to payment gateway
-    // window.location.href = `/payment?plan=${selectedPlan}`;
+    errorMessage.textContent = message;
+    errorPopup.style.display = 'flex';
 }
+
+
+async function proceedToPayment() {
+
+    try {
+        if (selectedPlan === 'code') {
+            const promoCode = document.getElementById('promoCodeInput').value.trim();
+            if (!promoCode || promoCode.length !== 11) {
+                showError('Please enter a valid 11-digit promo code');
+                return;
+            }
+            const promo_code = promoCode;
+            const response = await fetch('/payment/checkCode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({promo_code})
+            });
+
+            const data = await response.json();
+            // console.log(data);
+
+            if(data.iserr){
+                showError(data.msg);
+            }else{
+                window.location.href = '/prefernceListPCB';
+            }
+        }else{
+            const response = await fetch('/payment/paymentType', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({selectedPlan})
+            });
+
+            const data = await response.json();
+            // console.log(data);
+            if(data.iserr){
+                showError(data.msg);
+            }else{
+                window.location.href = '/prefernceListPCB';
+            }
+
+        }
+    } catch (error) {
+        console.log(error);
+    }
+   
+}
+
 
 // Mobile Menu Toggle
 document.querySelector('.mobile-menu-btn').addEventListener('click', function() {

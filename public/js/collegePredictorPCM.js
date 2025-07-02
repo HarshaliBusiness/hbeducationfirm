@@ -165,8 +165,11 @@ async function generateCollegeList(formData) {
             body: JSON.stringify(formData)
         });
 
+        
         const data = await response.json();
-        console.log(data);
+        central_object.formData = formData;
+        central_object.collegeList = data;
+        // console.log(data);
         displayColleges(data, formData);
 
     } catch (error) {
@@ -184,23 +187,29 @@ function displayColleges(colleges, formData) {
         return;
     }
 
+    let count = 1;
     colleges.forEach(college => {
-        const card = createCollegeCard(college, formData);
+        const card = createCollegeCard(college, formData, count);
+        count++;
         collegeCardsContainer.appendChild(card);
     });
 
     resultsContainer.style.display = 'block';
     updateSelectedCount(colleges.length);
+
+    setTimeout(() => {
+        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
 }
 
-function createCollegeCard(college, formData) {
+function createCollegeCard(college, formData, count) {
     const card = document.createElement('div');
     card.className = 'college-card selected';
     card.dataset.code = college.choice_code;
 
     let card_content = `
         <div class="college-card-header">
-            <div class="college-code">${college.choice_code}</div>
+            <div class="college-code">${count}</div>
             <div class="college-code">Seat type: ${college.seat_type}</div>
             <input type="checkbox" checked class="card-checkbox">
         </div>
@@ -388,3 +397,117 @@ async function fetchUniversity() {
         console.log(error);
     }
 }
+
+
+// Add this at the bottom of your collegePredictorPCM.js file
+
+document.getElementById('downloadPdf').addEventListener('click', generatePdf);
+
+
+function generatePdf() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape' });
+    
+    // Add title
+    doc.setFontSize(25);
+    doc.setTextColor(0);
+    doc.text('HB Educational Firm ', 148, 15, { align: 'center' });
+    
+    // Add date
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`College Predictor Results`, 148, 22, { align: 'center' });
+    
+    // Add user details
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Percentile: ${document.getElementById('percentile').value}`, 14, 30);
+    doc.text(`Category: ${document.getElementById('caste').value}`, 14, 37);
+    doc.text(`Gender: ${document.querySelector('input[name="gender"]:checked').value}`, 14, 44);
+    doc.text(`Round: ${document.getElementById('round').value}`, 14, 51);
+    
+    // Get selected colleges
+    const selectedColleges = Array.from(document.querySelectorAll('.college-card.selected'));
+    
+    if (selectedColleges.length === 0) {
+        doc.setFontSize(14);
+        doc.text('No colleges selected', 105, 70, { align: 'center' });
+    } else {
+
+        let headData = ['Sr. No.', 'College Name', 'Branch', 'GOPEN'];
+
+        if(central_object.formData.caste == 'EWS'){
+            headData.push('EWS');
+        }
+
+        if(central_object.formData.caste != 'OPEN' && central_object.formData.caste != 'EWS' && central_object.formData.gender == 'Male'){
+            headData.push(`G${central_object.formData.caste}`)
+        }
+
+        if(central_object.formData.gender == 'Female'){
+            headData.push('LOPEN');
+
+            if(central_object.formData.caste != 'OPEN' && central_object.formData.caste != 'EWS'){
+                headData.push(`L${central_object.formData.caste}`)
+            }
+        }
+        
+        if(central_object.formData.specialReservation != 'No'){
+            headData.push(central_object.formData.specialReservation);
+        }
+
+        let count = 1;
+        const tableData = central_object.collegeList.map(college => {
+            
+            const code = count;
+            count++;
+            const name = college.college_name;
+            const branch = college.branch_name;
+            const gopen = college.gopen;
+            let tableArray = [code, name, branch, gopen,]
+            if(central_object.formData.caste == 'EWS'){
+                tableArray.push(college.ews);
+            }
+            if(central_object.formData.caste != 'OPEN' && central_object.formData.caste != 'EWS' && central_object.formData.gender == 'Male'){
+                // toLowerCase()
+                let c = `G${central_object.formData.caste}`;
+                tableArray.push(college[c.toLowerCase()]);
+            }
+
+            if(central_object.formData.gender == 'Female'){
+               
+                tableArray.push(college.lopen);
+                if(central_object.formData.caste != 'EWS' && central_object.formData.caste != 'OPEN'){
+                    let c = `L${central_object.formData.caste}`;
+                    tableArray.push(college[c.toLowerCase()]);
+                }
+            }
+            
+            if(central_object.formData.specialReservation != 'No'){
+                tableArray.push(college[central_object.formData.specialReservation.toLowerCase()]);
+            }
+
+            return tableArray;
+        });
+        
+        // Add table
+        doc.autoTable({
+            head: [headData],
+            body: tableData,
+            startY: 60,
+            theme: 'grid',
+            headStyles: {
+                fillColor: [26, 58, 143],
+                textColor: 255
+            },
+            alternateRowStyles: {
+                fillColor: [240, 240, 240]
+            },
+            margin: { left: 6 }
+        });
+    }
+    
+    // Save the PDF
+    doc.save('college_predictor_results.pdf');
+}
+

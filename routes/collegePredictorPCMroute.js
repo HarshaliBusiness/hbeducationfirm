@@ -119,10 +119,10 @@ async function getSelectedBranchCode(selected_branches) {
 
 
 function calculateRankRange(rank) {
-    let minRank = rank - 3000;
-    let maxRank = rank + 25000;
+    let minRank = rank - 15000;
+    let maxRank = rank + 40000;
 
-    if (rank < 3000) {
+    if (rank < 15000) {
         minRank = 0;
     }
 
@@ -1049,9 +1049,13 @@ async function getColleges(formData) {
             console.log(error);
         }else{
             
-            const colleges =  college_filter(data, formData);
-            colleges.sort((a, b) => b.points - a.points);
-            // console.log(colleges);
+            let colleges =  college_filter(data, formData);
+            colleges.sort((a, b) => b.choice_points - a.choice_points);
+            if(colleges.length > 150){
+                colleges = colleges.slice(0,150);
+                colleges.sort((a, b) => b.choice_points - a.choice_points);
+            }
+             // console.log(colleges);
             return colleges;
         }
                
@@ -1064,7 +1068,6 @@ async function getColleges(formData) {
     }
 
 }
-
 
 function college_filter_by_city(colleges, city){
     return colleges.filter(element =>  city.includes(element.city));

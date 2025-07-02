@@ -12,7 +12,7 @@ router.get('/specialReservations', async(req, res)=>{
     const data = await specialReservation.aggregate([
       {
         $lookup: {
-          from: 'users', // must match the actual *collection name* in MongoDB (lowercase, plural usually)
+          from: 'users', 
           localField: 'phone_number',
           foreignField: 'phone_number',
           as: 'extra_info'
