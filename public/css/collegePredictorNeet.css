@@ -373,3 +373,27 @@ select:focus {
     width: 1.1rem;
     height: 1.1rem;
 }
+
+
+.download-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1.5rem;
+}
+
+.download-btn:hover {
+    background-color: #218838;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+

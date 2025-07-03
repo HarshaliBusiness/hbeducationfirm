@@ -365,9 +365,20 @@ async function fetchCity() {
             const child = document.createElement('label');
             child.classList.add('checkbox-label');
 
+            let cityName = '';
+            if(element.city == 'Ahmednagar'){
+                cityName = 'Ahilyanagar';
+            }else if(element.city == 'Aurangabad'){
+                cityName = 'Chatrapati Sambhaji Nagar';
+            }else if(element.city == 'Osmanabad'){
+                cityName = 'Dharashiv';
+            }else{
+                cityName = element.city;
+            }
+
             child.innerHTML = `
                 <input type="checkbox" name="region" value="${element.city}" >
-                <span>${element.city}</span>
+                <span>${cityName}</span>
             `;
 
             cityholder.appendChild(child);
@@ -503,11 +514,28 @@ function generatePdf() {
             alternateRowStyles: {
                 fillColor: [240, 240, 240]
             },
-            margin: { left: 6 }
+            margin: { left: 6 },
+            didDrawPage: function (data) {
+                // Note position — slightly above the bottom of the page
+                const pageHeight = doc.internal.pageSize.height;
+                doc.setFontSize(9);
+                doc.setTextColor(100);
+                doc.text(
+                    'Note: This list is based on last year\'s MHT CET Engineering cutoff. It is not your final preference list. Please cross-check with your counselor or teachers. __F indicates branches for girls only,',
+                    14,
+                    pageHeight - 10
+                );
+                doc.text(
+                    'and __U indicates unaided branches.',
+                    14,
+                    pageHeight - 6
+                );
+            }
         });
+
     }
     
     // Save the PDF
-    doc.save('college_predictor_results.pdf');
+    doc.save('engineering_college_predictor.pdf');
 }
 

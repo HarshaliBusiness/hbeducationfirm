@@ -46,10 +46,10 @@ async function getRankFromPercentile(percentile) {
 
 
 function calculateRankRange(rank) {
-    let minRank = rank - 30000;
+    let minRank = rank - 40000;
     let maxRank = rank + 300000;
 
-    if (rank < 30000) {
+    if (rank < 40000) {
         minRank = 0;
     }
 
@@ -162,8 +162,12 @@ async function getColleges(formData) {
         }else{
             
             // console.log(data);
-            const colleges =  college_filter(data, formData);
+            let colleges =  college_filter(data, formData);
             colleges.sort((a, b) => a.rank - b.rank);
+            if(colleges.length > 75){
+                colleges = colleges.slice(0,75);
+                colleges.sort((a, b) => a.rank - b.rank);
+            }
             // console.log(colleges);
             return colleges;
         }

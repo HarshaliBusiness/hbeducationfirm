@@ -21,7 +21,7 @@ const new_data_of_student = {
 function calculateRankRange(rank) {
     // console.log(rank);
     let minRank = rank - 3000;
-    let maxRank = rank + 7000;
+    let maxRank = rank + 15000;
 
     if (rank < 3000) {
         minRank = 0;
@@ -89,8 +89,6 @@ async function getRankFromPercentile(percentile) {
         throw error;
     }
 }
-
-
 
 
 async function getColleges(formData) {
@@ -915,8 +913,12 @@ async function getColleges(formData) {
         }else{
             
             // console.log(data);
-            const colleges =  college_filter(data, formData);
-            colleges.sort((a, b) => b.points - a.points);
+            let colleges =  college_filter(data, formData);
+            colleges.sort((a, b) => b.choice_points - a.choice_points);
+            if(colleges.length > 75){
+                colleges = colleges.slice(0,75);
+                colleges.sort((a, b) => b.choice_points - a.choice_points);
+            }
             // console.log(colleges);
             return colleges;
         }
