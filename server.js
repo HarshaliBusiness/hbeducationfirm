@@ -37,7 +37,7 @@ app.get('/',isLoggedIn, async(req,res)=>{
 });
 
 app.get('/collegeList', (req, res)=>{
-  res.redirect('https://sell-college-list.onrender.com/vipulPh/150')
+  res.redirect('https://sell-college-list.onrender.com/vipulPha/150')
 })
 
 // register and login
