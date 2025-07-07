@@ -31,6 +31,7 @@ router.post('/checkCredentials', async(req,res)=>{
         return res.json({msg: `Invalid password.`,exam:`null`,login : false});
       }
       req.session.user = {phone : phone, password : hashPassword, promoCode:'',payment:''};
+      // req.session.user = {phone : phone, password : hashPassword, promoCode:'',payment:'', formData:'', order: ''};
       return res.json({msg: `Login successful!`,exam:`${user.examType}` ,login : true});
     }
   } catch (error) {

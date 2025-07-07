@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {db, supabase} = require('../database/db');
-const {User, promoCode, Pdf, specialReservation, contactUs} = require('../database/schema');
+const {User, promoCode, Pdf, specialReservation, contactUs, preferenceList} = require('../database/schema');
 
 router.get('/',(req,res)=>{
   res.render('adminPanel');
@@ -128,5 +128,58 @@ router.delete('/deleteContactForm/:Id', async (req, res) => {
     res.status(500).json({ success: false,error: 'Server error' });
   }
 });
+
+router.get('/preferenceLists',async (req, res)=>{
+  try {
+     const data = await preferenceList.find({});
+    //  console.log(data);
+     res.json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// router.get('/', async (req, res) => {
+//   try {
+//     const pdf_id = req.params.pdf_id; // ✅ this gets the actual string
+//     // console.log(pdf_id);
+//     const data = await Pdf.find({ pdfID: pdf_id }); // ✅ use string here
+//     // console.log(data);
+//     res.json({data, isok:true});
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+router.get('/downloadPreferencePDF/:pdf_id', async (req, res) => {
+  try {
+    const pdf_id = req.params.pdf_id;
+
+    // Use findOne instead of find
+    const pdfDoc = await Pdf.findOne({ pdfID: pdf_id });
+
+    // Handle not found case
+    if (!pdfDoc || !pdfDoc.pdf) {
+      return res.status(404).json({ error: 'PDF not found' });
+    }
+
+    const base64Pdf = pdfDoc.pdf; // ✅ Now this is a string
+    const buffer = Buffer.from(base64Pdf, 'base64');
+
+    const fileName = `${pdf_id}.pdf`;
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${fileName}"`,
+    });
+
+    res.send(buffer);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 module.exports = router;

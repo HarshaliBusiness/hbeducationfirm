@@ -16,6 +16,9 @@ let specialReservations = [];
 // Dummy data for contact forms
 let contactForms = [];
 
+// Dummy data for preference lists
+let preferenceLists = [];
+
 // DOM elements
 const loginPage = document.getElementById('login-page');
 const adminPanel = document.getElementById('admin-panel');
@@ -30,15 +33,18 @@ const sections = {
     promo_codes: document.getElementById('promo-codes-section'),
     assigned_promos: document.getElementById('assigned-promos-section'),
     special_reservations: document.getElementById('special-reservations-section'),
-    contact_forms: document.getElementById('contact-forms-section')
+    contact_forms: document.getElementById('contact-forms-section'),
+    preference_list: document.getElementById('preference-list-section')
 };
 
 // Modal elements
 const assignPromoModal = document.getElementById('assign-promo-modal');
-const closeModalBtn = document.querySelector('.close-modal');
+const paymentModal = document.getElementById('payment-modal');
+const closeModalBtns = document.querySelectorAll('.close-modal');
 const studentSearchInput = document.getElementById('student-search-input');
 const studentSearchResults = document.getElementById('student-search-results');
 const assignPromoBtn = document.getElementById('assign-promo-btn');
+const paymentScreenshotImg = document.getElementById('payment-screenshot-img');
 let currentPromoCode = '';
 
 // Login functionality
@@ -48,7 +54,7 @@ loginForm.addEventListener('submit', function(e) {
     const password = document.getElementById('password').value;
     
     // Static login credentials
-    if (phone === '8999741641' && password === '123456') {
+    if ((phone === '8999741641' && password === '123456') || (phone === '9970303771' && password === '123456') ) {
         loginPage.style.display = 'none';
         adminPanel.style.display = 'block';
         showSection('dashboard');
@@ -58,6 +64,7 @@ loginForm.addEventListener('submit', function(e) {
         populateAssignedPromos();
         populateSpecialReservations();
         populateContactForms();
+        populatePreferenceLists();
     } else {
         alert('Invalid phone number or password');
     }
@@ -369,6 +376,281 @@ function populateContactForms(searchQuery = '') {
     });
 }
 
+// Populate preference lists
+function populatePreferenceLists(examType = '', status = '', searchQuery = '') {
+    const container = document.getElementById('preference-list-container');
+    container.innerHTML = '';
+    
+    let filteredPreferenceLists = preferenceLists;
+    
+    if (examType) {
+        filteredPreferenceLists = filteredPreferenceLists.filter(list => list.examType === examType);
+    }
+    
+    if (status) {
+        if (status === 'pending') {
+            filteredPreferenceLists = filteredPreferenceLists.filter(list => !list.isCheck);
+        } else if (status === 'checked') {
+            filteredPreferenceLists = filteredPreferenceLists.filter(list => list.isCheck && !list.isAccept);
+        } else if (status === 'accepted') {
+            filteredPreferenceLists = filteredPreferenceLists.filter(list => list.isAccept);
+        }
+    }
+    
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filteredPreferenceLists = filteredPreferenceLists.filter(list => 
+            list.name.toLowerCase().includes(query) || 
+            list.whatsappNumber.includes(query) ||
+            list.registerPhone.includes(query) ||
+            list.transactionId.toLowerCase().includes(query)
+        );
+    }
+    
+    filteredPreferenceLists.forEach(list => {
+        const card = document.createElement('div');
+        card.className = 'preference-card';
+        card.innerHTML = `
+            <div class="preference-card-header">
+                <div class="preference-card-title">${list.name} (${list.registerPhone})</div>
+                <div class="preference-status">
+                    ${list.isAccept ? '<span class="status-badge accepted">Accepted</span>' : 
+                     list.isCheck ? '<span class="status-badge checked">Checked</span>' : 
+                     '<span class="status-badge pending">Pending</span>'}
+                </div>
+            </div>
+            <div class="preference-card-details">
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Exam Type</span>
+                    <span class="preference-card-value">${list.examType}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">whatsapp Number</span>
+                    <span class="preference-card-value">${list.whatsappNumber}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">General Rank</span>
+                    <span class="preference-card-value">${list.generalRank}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">All India Rank</span>
+                    <span class="preference-card-value">${list.allIndiaRank}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Caste</span>
+                    <span class="preference-card-value">${list.caste}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Gender</span>
+                    <span class="preference-card-value">${list.gender}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Home University</span>
+                    <span class="preference-card-value">${list.homeUniversity}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">TFWS</span>
+                    <span class="preference-card-value">${list.tfws ? 'Yes' : 'No'}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Branch Categories</span>
+                    <span class="preference-card-value">${list.branchCategories.join(', ')}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Cities</span>
+                    <span class="preference-card-value">${list.cities.join(', ')}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Selected Branches</span>
+                    <span class="preference-card-value">${list.selectedBranches.join(', ')}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Transaction ID</span>
+                    <span class="preference-card-value">${list.transactionId}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Payment Plan</span>
+                    <span class="preference-card-value">${list.paymentPlan}</span>
+                </div>
+                <div class="preference-card-detail">
+                    <span class="preference-card-label">Submitted At</span>
+                    <span class="preference-card-value">${formatDateTime(list.createdAt)}</span>
+                </div>
+            </div>
+            <div class="preference-card-actions">
+                <button class="view-payment-btn" data-id="${list._id}">
+                    <i class="fas fa-image"></i> View Payment
+                </button>
+                <button class="check-btn" data-id="${list._id}" ${list.isCheck ? 'disabled' : ''}>
+                    <i class="fas fa-check"></i> Check
+                </button>
+                <button class="accept-btn" data-id="${list._id}" ${list.isAccept || !list.isCheck ? 'disabled' : ''}>
+                    <i class="fas fa-check-double"></i> Accept
+                </button>
+                <button class="download-pdf-btn" data-id="${list.pdfID}">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+    
+    // Add event listeners for buttons
+    document.querySelectorAll('.view-payment-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const listId = this.getAttribute('data-id');
+            viewPaymentScreenshot(listId);
+        });
+    });
+    
+    document.querySelectorAll('.check-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const listId = this.getAttribute('data-id');
+            updatePreferenceListStatus(listId, 'check');
+        });
+    });
+    
+    document.querySelectorAll('.accept-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const listId = this.getAttribute('data-id');
+            updatePreferenceListStatus(listId, 'accept');
+        });
+    });
+    
+    document.querySelectorAll('.download-pdf-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const listId = this.getAttribute('data-id');
+            
+            downloadPreferenceListPDF(listId);
+        });
+    });
+}
+
+// Format date to dd/mm/yyyy and time to hh:mm am/pm
+function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    
+    return `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
+}
+
+// View payment screenshot
+function viewPaymentScreenshot(listId) {
+    const list = preferenceLists.find(item => item._id === listId);
+    if (list && list.paymentScreenshot) {
+        // Convert buffer data to base64
+        const base64String = arrayBufferToBase64(list.paymentScreenshot.data);
+        paymentScreenshotImg.src = `data:${list.paymentScreenshot.contentType};base64,${base64String}`;
+        paymentModal.style.display = 'flex';
+    } else {
+        showError('Payment screenshot not available');
+    }
+}
+
+// Convert ArrayBuffer to Base64
+function arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+}
+
+// Update preference list status
+async function updatePreferenceListStatus(listId, action) {
+    try {
+        const response = await fetch(`/adminPanel/updatePreferenceList/${listId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Update local data
+            const listIndex = preferenceLists.findIndex(item => item._id === listId);
+            if (listIndex !== -1) {
+                if (action === 'check') {
+                    preferenceLists[listIndex].isCheck = true;
+                } else if (action === 'accept') {
+                    preferenceLists[listIndex].isAccept = true;
+                }
+            }
+            
+            // Refresh the list
+            const examType = document.getElementById('preference-exam-filter').value;
+            const status = document.getElementById('preference-status-filter').value;
+            const searchQuery = document.getElementById('preference-search').value;
+            populatePreferenceLists(examType, status, searchQuery);
+        } else {
+            showError(data.message || 'Failed to update preference list');
+        }
+    } catch (error) {
+        console.error('Error updating preference list:', error);
+        showError('Error updating preference list');
+    }
+}
+
+// Download preference list PDF
+async function downloadPreferenceListPDF(pdf_id) {
+
+
+    fetch(`/adminPanel/downloadPreferencePDF/${pdf_id}`)
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${pdf_id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error("Error downloading PDF:", error);
+        });
+
+
+    // console.log(pdf_id);
+    // try {
+    //     const response = await fetch(`/adminPanel/downloadPreferencePDF/${pdf_id}`);
+    //     const data = await response.json();
+
+    //     console.log(data);
+    //     if (response.isok) {
+    //         const blob = data.data.blob();
+    //         const url = window.URL.createObjectURL(blob);
+    //         const a = document.createElement('a');
+    //         a.href = url;
+    //         a.download = `preference_list_${listId}.pdf`;
+    //         document.body.appendChild(a);
+    //         a.click();
+    //         document.body.removeChild(a);
+    //         window.URL.revokeObjectURL(url);
+    //     } else {
+    //         const data = await response.json();
+    //         showError(data.message || 'Failed to download PDF');
+    //     }
+    // } catch (error) {
+    //     console.error('Error downloading PDF:', error);
+    //     showError('Error downloading PDF');
+    // }
+}
+
 // Delete reservation
 async function deleteReservation(Id) {
     try {
@@ -426,14 +708,20 @@ function openAssignPromoModal(code) {
 }
 
 // Close modal
-closeModalBtn.addEventListener('click', function() {
-    assignPromoModal.style.display = 'none';
+closeModalBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        assignPromoModal.style.display = 'none';
+        paymentModal.style.display = 'none';
+    });
 });
 
 // Close modal when clicking outside
-assignPromoModal.addEventListener('click', function(e) {
+window.addEventListener('click', function(e) {
     if (e.target === assignPromoModal) {
         assignPromoModal.style.display = 'none';
+    }
+    if (e.target === paymentModal) {
+        paymentModal.style.display = 'none';
     }
 });
 
@@ -577,6 +865,30 @@ document.getElementById('contact-form-search').addEventListener('input', functio
     populateContactForms(searchQuery);
 });
 
+// Filter preference lists by exam type
+document.getElementById('preference-exam-filter').addEventListener('change', function() {
+    const examType = this.value;
+    const status = document.getElementById('preference-status-filter').value;
+    const searchQuery = document.getElementById('preference-search').value;
+    populatePreferenceLists(examType, status, searchQuery);
+});
+
+// Filter preference lists by status
+document.getElementById('preference-status-filter').addEventListener('change', function() {
+    const examType = document.getElementById('preference-exam-filter').value;
+    const status = this.value;
+    const searchQuery = document.getElementById('preference-search').value;
+    populatePreferenceLists(examType, status, searchQuery);
+});
+
+// Search preference lists
+document.getElementById('preference-search').addEventListener('input', function() {
+    const examType = document.getElementById('preference-exam-filter').value;
+    const status = document.getElementById('preference-status-filter').value;
+    const searchQuery = this.value;
+    populatePreferenceLists(examType, status, searchQuery);
+});
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', async function() {
     await student_info();
@@ -584,6 +896,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     await fetchPromoCodes();
     await fetchSpecialReservations();
     await fetchContactForms();
+    await fetchPreferenceLists();
     
     // Create overlay for mobile menu
     const overlay = document.createElement('div');
@@ -607,6 +920,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             <li><a href="#" data-section="assigned-promos"><i class="fas fa-list-check"></i> Assigned Promos</a></li>
             <li><a href="#" data-section="special-reservations"><i class="fas fa-star"></i> Special Reservations</a></li>
             <li><a href="#" data-section="contact-forms"><i class="fas fa-envelope"></i> Contact Forms</a></li>
+            <li><a href="#" data-section="preference-list"><i class="fas fa-list-check"></i> Preference List</a></li>
         </ul>
         <div class="auth-buttons">
             <button class="btn btn-outline" id="logout-btn-mobile"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -652,12 +966,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.getElementById('totalPurchase').textContent = purchases.length;
     document.getElementById('totalReservations').textContent = specialReservations.length;
     document.getElementById('totalContactForms').textContent = contactForms.length;
+    document.getElementById('totalPreferenceLists').textContent = preferenceLists.length;
     populateStudentTable();
     populatePurchaseTable();
     populatePromoCodes();
     populateAssignedPromos();
     populateSpecialReservations();
     populateContactForms();
+    populatePreferenceLists();
 });
 
 // Load student info from API
@@ -693,7 +1009,6 @@ async function student_info() {
         console.log(error);
     }
 }
-
 
 async function student_purchases() {
     try {
@@ -803,6 +1118,44 @@ async function fetchContactForms() {
 
     } catch (error) {
         console.error('Error fetching contact forms:', error);
+    }
+}
+
+// Fetch preference lists from API
+async function fetchPreferenceLists() {
+    try {
+        const response = await fetch('/adminPanel/preferenceLists');
+        const data = await response.json();
+        
+        // Assuming the API returns an array of preference list objects
+        data.forEach(list => {
+            preferenceLists.push({
+                _id: list._id,
+                pdfID: list.pdf_id,
+                name: list.name,
+                isCheck: list.isCheck,
+                examType: list.examType,
+                isAccept: list.isAccept,
+                whatsappNumber: list.whatsappNumber,
+                registerPhone: list.registerPhone,
+                generalRank: list.generalRank,
+                allIndiaRank: list.allIndiaRank,
+                caste: list.caste,
+                gender: list.gender,
+                homeUniversity: list.homeUniversity,
+                tfws: list.tfws,
+                branchCategories: list.branchCategories,
+                cities: list.cities,
+                selectedBranches: list.selectedBranches,
+                paymentScreenshot: list.paymentScreenshot,
+                transactionId: list.transactionId,
+                createdAt: list.createdAt,
+                paymentPlan: list.paymentPlan
+            });
+        });
+
+    } catch (error) {
+        console.error('Error fetching preference lists:', error);
     }
 }
 

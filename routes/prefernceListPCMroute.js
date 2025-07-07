@@ -126,21 +126,21 @@ function calculateRankRange(formData) {
     }else if(formData.generalRank < 30000){
         subMinRank = 8000;
     }else if(formData.generalRank < 40000){
-        subMinRank = 10000;
+        subMinRank = 9000;
     }else if(formData.generalRank < 50000){
-        subMinRank = 12000;
+        subMinRank = 10000;
     }else if(formData.generalRank < 60000){
-        subMinRank = 15000;
+        subMinRank = 11000;
     }else if(formData.generalRank < 70000){
-        subMinRank = 17000;
+        subMinRank = 12000;
     }else if(formData.generalRank < 80000){
-        subMinRank = 19000;
+        subMinRank = 13000;
     }else if(formData.generalRank < 90000){
-        subMinRank = 21000;
+        subMinRank = 14000;
     }else if(formData.generalRank < 100000){
-        subMinRank = 23000;
+        subMinRank = 15000;
     }else {
-        subMinRank = 26000;
+        subMinRank = 17000;
     }
     
 
@@ -155,21 +155,21 @@ function calculateRankRange(formData) {
     }else if(formData.allIndiaRank  < 20000){
         subMinRank = 8000;
     }else if(formData.allIndiaRank  < 30000){
-        subMinRank = 10000;
+        subMinRank = 9000;
     }else if(formData.allIndiaRank  < 40000){
-        subMinRank = 12000;
+        subMinRank = 10000;
     }else if(formData.allIndiaRank  < 50000){
-        subMinRank = 15000;
+        subMinRank = 11000;
     }else if(formData.allIndiaRank < 60000){
-        subMinRank = 17000;
+        subMinRank = 12000;
     }else if(formData.allIndiaRank  < 70000){
-        subMinRank = 19000;
+        subMinRank = 13000;
     }else if(formData.allIndiaRank  < 80000){
-        subMinRank = 21000;
+        subMinRank = 14000;
     }else if(formData.allIndiaRank < 90000){
-        subMinRank = 23000;
+        subMinRank = 15000;
     }else {
-        subMinRank = 26000;
+        subMinRank = 17000;
     }
     
     minRank -= subMinRank;
@@ -1221,15 +1221,23 @@ router.post('/savePdf',upload.single('pdf'),async (req,res)=>{
     try {
         const name = JSON.parse(req.body.name);
         const exam = JSON.parse(req.body.exam);
-        const pdfBuffer = req.file.buffer; // Access the uploaded file buffer
-
+        const is_verified = JSON.parse(req.body.is_verified);
+        const pdfBuffer = req.file.buffer; 
+        const pdf_id = JSON.parse(req.body.pdfID);
         // console.log(name);
         // console.log(pdfBuffer);
         const phone = req.session.user.phone;
-    
+        let isVerified;
+        if(is_verified == 'true'){
+            isVerified = true;
+        }else{
+            isVerified = false;
+        }
         const promo_code = req.session.user.promoCode;
         const payment = req.session.user.payment;
         const newPreferenceList = new Pdf({
+            pdfID: pdf_id,
+            isVerified: isVerified,
             phone_number: phone,
             code: promo_code,
             examType: exam,
@@ -1240,6 +1248,7 @@ router.post('/savePdf',upload.single('pdf'),async (req,res)=>{
         await newPreferenceList.save();
         req.session.user.payment = '';
         req.session.user.promoCode = '';
+        req.session.pdfID = pdf_id;
         // console.log(req.session.user);
         res.json({ 
             success: true,

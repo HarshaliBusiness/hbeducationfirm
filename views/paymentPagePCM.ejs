@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HB Educational Firm</title>
+    <link rel="icon" href="/assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/paymentPagePCM.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">HB <span>Educational</span>Firm</a>
+            <div class="auth-buttons desktop">
+                <button class="btn btn-outline" id="backBtn">Back</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Student Information</h1>
+        <p id="note">Note: Please fill in the information carefully. Your list will be provided on your WhatsApp number and will also be available in your profile's download section within 12 hours. This list is generated based on last year's cutoff data. Sometimes, the number of colleges may be fewer than 150 due to limited available choices, so please select your options carefully. Make sure to read the privacy policy thoroughly.</p>
+        
+        <form id="studentForm">
+            <!-- Personal Information Section -->
+            <div class="form-group">
+                <h2 style="color: #4a90e2; margin-bottom: 1rem;">Personal Details</h2>
+                <label for="studentName">Student Name</label>
+                <input type="text" id="studentName" name="studentName" required>
+                
+                <label for="whatsappNumber">WhatsApp Number</label>
+                <input type="tel" id="whatsappNumber" name="whatsappNumber">
+            </div>
+
+            <!-- Information from Previous Page -->
+            <div class="form-group">
+                <h2 style="color: #4a90e2; margin-bottom: 1rem;">Admission Details</h2>
+                
+                <div class="info-display" id="displayInformation">
+                    <!-- <p><span class="info-label">Register Phone No.:</span> <span class="info-value" >899741641</span></p>
+                    <p><span class="info-label">General Rank:</span> <span class="info-value" id="displayGeneralRank">12345</span></p>
+                    <p><span class="info-label">All India Rank:</span> <span class="info-value" id="displayAllIndiaRank">23456</span></p>
+                    <p><span class="info-label">Caste:</span> <span class="info-value" id="displayCaste">OBC</span></p>
+                    <p><span class="info-label">Gender:</span> <span class="info-value" id="displayGender">Male</span></p>
+                    <p><span class="info-label">Home University:</span> <span class="info-value" id="displayHomeUniversity">Mumbai University</span></p>
+                    <p><span class="info-label">Special Reservation:</span> <span class="info-value" id="displaySpecialReservation">None</span></p>
+                    <p><span class="info-label">TFWS:</span> <span class="info-value" id="displayTFWS">No</span></p> -->
+                </div>
+                
+                <div class="info-display">
+                    <p><span class="info-label">Branch Category:</span></p>
+                    <div class="array-display" id="displayBranchCategory">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="info-display" id="selectedBranch">
+                    <p><span class="info-label">Other Branch Selection:</span></p>
+                    <div class="array-display" id="displayOtherBranchSelection">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="info-display">
+                    <p><span class="info-label">Preferred Cities:</span></p>
+                    <div class="array-display" id="displayCities">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Section -->
+            <div class="form-group">
+                <h2 style="color: #4a90e2; margin-bottom: 1rem;">Payment Details</h2>
+                
+                <div class="qr-container" id="qrContainer">
+                    <!-- <p>Scan the QR code to make payment</p>
+                    <img src="/assets/qr/phone pay.jpg" alt="Payment QR Code">
+                    <p style="margin-top: 1rem;">Amount: ₹500</p> -->
+                </div>
+                
+                <div class="upload-container">
+                    <label class="upload-label">Upload Payment Screenshot</label>
+                    <input type="file" id="paymentScreenshot" class="file-input" accept="image/*">
+                    <label for="paymentScreenshot" class="file-input-label">Choose File</label>
+                    <div class="file-name" id="fileName">No file chosen</div>
+                </div>
+                
+                <label for="transactionId">Transaction ID</label>
+                <input type="text" id="transactionId" name="transactionId" required>
+            </div>
+
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required>
+                    <label for="privacyPolicy" class="checkbox-label">I agree to the <a href="/privacyPolicy" target="_blank">Privacy Policy</a></label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Application</button>
+        </form>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <!-- <span class="close-modal">&times;</span> -->
+            <h3>Application Submitted Successfully!</h3>
+            <p>Your preference list will be sent to your provided WhatsApp number and will be available in the 'Download' section of your profile within 12 hours.</p>
+            <button class="modal-btn" id="modalOkBtn">OK</button>
+        </div>
+    </div>
+
+    <script src="/js/paymentPagePCM.js"></script>
+</body>
+</html>

@@ -51,6 +51,7 @@
                     <li><a href="#" data-section="assigned_promos"><i class="fas fa-list-check"></i> Assigned Promos</a></li>
                     <li><a href="#" data-section="special_reservations"><i class="fas fa-star"></i> Special Reservations</a></li>
                     <li><a href="#" data-section="contact_forms"><i class="fas fa-envelope"></i> Contact Forms</a></li>
+                    <li><a href="#" data-section="preference_list"><i class="fas fa-list-check"></i> Preference List</a></li>
                 </ul>
             </div>
 
@@ -78,6 +79,10 @@
                             <div style="flex: 1; min-width: 200px; background: rgba(26, 58, 143, 0.2); padding: 1rem; border-radius: 8px; border: 1px solid #1a3a8f;">
                                 <h4>Contact Forms</h4>
                                 <p style="font-size: 2rem; color: #4a90e2;" id="totalContactForms"></p>
+                            </div>
+                            <div style="flex: 1; min-width: 200px; background: rgba(26, 58, 143, 0.2); padding: 1rem; border-radius: 8px; border: 1px solid #1a3a8f;">
+                                <h4>Preference Lists</h4>
+                                <p style="font-size: 2rem; color: #4a90e2;" id="totalPreferenceLists"></p>
                             </div>
                         </div>
                     </div>
@@ -205,6 +210,33 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Preference List Section -->
+                <div id="preference-list-section" style="display: none;">
+                    <h2 class="section-title">Preference List Confirmation</h2>
+                    <div class="card">
+                        <div class="filter-section">
+                            <select id="preference-exam-filter">
+                                <option value="">All Exam Types</option>
+                                <option value="MHTCETPCM">MHTCET PCM</option>
+                                <option value="MHTCETPCB">MHTCET PCB</option>
+                                <option value="NEET">NEET</option>
+                                <option value="BBA/BMS">BBA/BMS</option>
+                                <option value="BCA">BCA</option>
+                            </select>
+                            <select id="preference-status-filter">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="checked">Checked</option>
+                                <option value="accepted">Accepted</option>
+                            </select>
+                            <input type="text" id="preference-search" placeholder="Search preference lists...">
+                        </div>
+                        <div class="preference-list-container" id="preference-list-container">
+                            <!-- Preference list cards will be populated here -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -222,6 +254,19 @@
                     <!-- Search results will appear here -->
                 </div>
                 <button class="assign-btn" id="assign-promo-btn">Assign Promo Code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Screenshot Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Payment Screenshot</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="payment-screenshot-img" src="" alt="Payment Screenshot" style="max-width: 100%;">
             </div>
         </div>
     </div>

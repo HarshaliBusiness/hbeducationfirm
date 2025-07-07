@@ -386,84 +386,22 @@ async function generateCollegeList(formData) {
         }
 
         // If no payment needed (promo code case)
-        if(paymentData.order === '') {
+        if(paymentData.order === 'code') {
             showSuccessCodeModal();
-            await processCollegeList(formData);
+            await processCollegeList(formData, true, paymentData.order);
             return;
         }
 
-        // Store formData for retry functionality
-        let currentFormData = formData;
+        if(paymentData.order === 'basic') {
+            await processCollegeList(formData, false, paymentData.order);
+            return;
+        }
+
+        if(paymentData.order === 'premium') {
+            await processCollegeList(formData, false, paymentData.order);
+            return;
+        }
         
-        // Setup payment handler
-        const handlePayment = async () => {
-            const paymentPromise = new Promise((resolve, reject) => {
-                const options = {
-                    key: "rzp_test_MrwlI2gihncL5U",
-                    amount: paymentData.order.amount,
-                    currency: paymentData.order.currency,
-                    name: "HB Educational Firm",
-                    description: "Basic Plan",
-                    order_id: paymentData.order.id,
-                    handler: async function(response) {
-                        try {
-                            const verifyRes = await fetch("/payment/verify-payment", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify(response)
-                            });
-
-                            const verifyData = await verifyRes.json();
-                            if(verifyData.isOk) {
-                                showSuccessModal();
-                                resolve(true);
-                            } else {
-                                throw new Error(verifyData.msg || 'Payment verification failed');
-                            }
-                        } catch (error) {
-                            reject(error);
-                        }
-                    },
-                    prefill: {
-                        name: "Test User",
-                        email: "test@example.com",
-                        contact: "9876543210"
-                    },
-                    theme: { color: "#3399cc" },
-                    modal: {
-                        ondismiss: function() {
-                            reject(new Error('Payment window closed'));
-                        }
-                    }
-                };
-
-                const rzp = new Razorpay(options);
-                rzp.open();
-            });
-
-            try {
-                await paymentPromise;
-                await processCollegeList(currentFormData);
-            } catch (error) {
-                showErrorModal(error.message);
-            }
-        };
-
-        // Start payment process
-        await handlePayment();
-
-        // Retry payment button handler
-        retryPayment.onclick = () => {
-            paymentErrorModal.style.display = 'none';
-            handlePayment();
-        };
-
-        // Continue button handler (in case they close success modal early)
-        continueAfterPayment.onclick = () => {
-            paymentSuccessModal.style.display = 'none';
-            // processCollegeList(currentFormData);
-        };
-
     } catch (error) {
         console.error('Error:', error);
         showErrorModal(error.message || 'An error occurred during payment processing');
@@ -485,40 +423,71 @@ function showSuccessCodeModal() {
     paymentSuccessModal.style.display = 'block';
 }
 
-
 function showErrorModal(message) {
     errorMessage.textContent = message;
     paymentErrorModal.style.display = 'block';
 }
 
-
-async function processCollegeList(formData) {
+async function processCollegeList(formData, isVerified, order) {
     try {
+        // Step 1: Get college list
         const response = await fetch('/prefernceListPCM/College_list', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
         });
 
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
 
-        // Get student name
+        // Step 2: Get student name
         const nameResponse = await fetch('/prefernceListPCM/student_name');
+        if (!nameResponse.ok) {
+            throw new Error('Failed to fetch student name');
+        }
         const nameData = await nameResponse.json();
         central_object.name = nameData.name;
 
-        // Process results
+        // Step 3: Process results
         central_object.final_college_list = data;
         generatePdfList();
-        await savepdfintodatabase();
-        displayColleges(data, formData);
-        document.getElementById('generate_college_list').style.display = 'none';
+        await savepdfintodatabase(isVerified);
+        
+        if (isVerified) {
+            // Case 1: Verified - show colleges
+            displayColleges(data, formData);
+            document.getElementById('generate_college_list').style.display = 'none';
+        } else {
+            // Case 2: Not verified - proceed to payment
+            const paymentResponse = await fetch('/paymentPagePCM/paymentPagePCMData', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ formData, order })
+            });
+
+            if (!paymentResponse.ok) {
+                throw new Error(`Payment error! status: ${paymentResponse.status}`);
+            }
+
+            const paymentData = await paymentResponse.json();
+            
+            if (paymentData.success) {
+                // Store data in session and redirect
+                window.location.href = '/paymentPagePCM';
+            } else {
+                console.error('Payment failed:', paymentData.message);
+                alert('Payment processing failed: ' + (paymentData.message || 'Unknown error'));
+            }
+        }
     } catch (error) {
         console.error('Error processing college list:', error);
+        alert('An error occurred: ' + error.message);
         throw error;
     }
 }
-
 
 function displayColleges(colleges, formData) {
     collegeCardsContainer.innerHTML = '';
@@ -544,6 +513,10 @@ function displayColleges(colleges, formData) {
     
     resultsContainer.style.display = 'block';
     updateSelectedCount(colleges.length);
+
+    setTimeout(() => {
+        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
 }
 
 function createCollegeCard(college, formData, count, tfws) {
@@ -682,7 +655,7 @@ function generatePdfList() {
     
 }
 
-async function savepdfintodatabase() {
+async function savepdfintodatabase(isVerified) {
     try {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
@@ -692,8 +665,8 @@ async function savepdfintodatabase() {
         });
 
         // Add student info
-        doc.setFontSize(16);
-        doc.text('Student Information', 14, 20);
+        doc.setFontSize(20);
+        doc.text('HB Educational Firm', 14, 20); //HB Educational Firm
         doc.setFontSize(12);
         doc.text(`Name: ${central_object.name}`, 14, 30);
         doc.text(`General Rank: ${central_object.formData.generalRank}`, 14, 36);
@@ -702,36 +675,52 @@ async function savepdfintodatabase() {
         doc.text(`Home University: ${central_object.formData.homeuniversity}`, 14, 54);
         doc.text(`Caste: ${central_object.formData.caste}`, 14, 60);
 
-        if(central_object.formData.tfws){
-            doc.text('TFWS: Yes', 14, 66);
-        }else{
-            doc.text('TFWS: No', 14, 66);
-        }
+        // Start dynamic Y position from 66
+        let currentY = 66;
+
+        // Branch Categories
+        const branch_cat_obj = {
+            All: 'All',
+            CIVIL: 'Civil',
+            COMP: 'Computer Science',
+            IT: 'Information Technology',
+            COMPAI: 'CSE (Artificial Intelligence)',
+            AI: 'Artificial Intelligence',
+            ELECTRICAL: 'Electrical',
+            ENTC: 'ENTC',
+            MECH: 'Mechanical',
+            OTHER: 'Other'
+        };
+
+        const branch_categories = central_object.formData.branchCategories
+            .map(el => branch_cat_obj[el] || el)
+            .join(", ");
+        const wrappedBranch = doc.splitTextToSize(`Branch Category: ${branch_categories}`, 270);
+        doc.text(wrappedBranch, 14, currentY);
+        currentY += wrappedBranch.length * 6;
+
+        // City
+        const cityString = central_object.formData.city.join(", ") + ".";
+        const wrappedCity = doc.splitTextToSize(`City: ${cityString}`, 270);
+        doc.text(wrappedCity, 14, currentY);
+        currentY += wrappedCity.length * 6;
+
+        // TFWS
+        const tfwsText = central_object.formData.tfws ? 'TFWS: Yes' : 'TFWS: No';
+        doc.text(tfwsText, 14, currentY);
+        currentY += 10;
 
         // Add table
         const table = document.getElementById('pdfTable');
-        const rows = [];
-        
-        // Get table headers
-        const headers = [];
-        table.querySelectorAll('th').forEach(th => {
-            headers.push(th.textContent);
-        });
-        
-        // Get table rows
-        table.querySelectorAll('tr').forEach(tr => {
-            const row = [];
-            tr.querySelectorAll('td').forEach(td => {
-                row.push(td.textContent);
-            });
-            if (row.length) rows.push(row);
-        });
+        const headers = Array.from(table.querySelectorAll('th')).map(th => th.textContent);
+        const rows = Array.from(table.querySelectorAll('tr')).map(tr =>
+            Array.from(tr.querySelectorAll('td')).map(td => td.textContent)
+        ).filter(row => row.length);
 
-        // Add table to PDF
         doc.autoTable({
             head: [headers],
             body: rows,
-            startY: 70,
+            startY: currentY,
             styles: {
                 fontSize: 8,
                 cellPadding: 3,
@@ -740,29 +729,33 @@ async function savepdfintodatabase() {
             margin: { left: 14 }
         });
 
+        const randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
+
+        let pdfId = `${central_object.name}${randomFourDigitNumber}`;
+
+        // Convert PDF to blob and send to server
         const pdfBlob = doc.output('blob');
         const formData = new FormData();
         formData.append('pdf', pdfBlob, 'preference_list.pdf');
-        formData.append('name',JSON.stringify(central_object.name));
-        formData.append('exam',JSON.stringify('Engineering'));
-        console.log(formData);
-        // 4. Send to backend for storage
+        formData.append('name', JSON.stringify(central_object.name));
+        formData.append('exam', JSON.stringify('Engineering'));
+        formData.append('is_verified', JSON.stringify(isVerified ? 'true' : 'false'));
+        formData.append('pdfID', JSON.stringify(pdfId));
+
         const response = await fetch('/prefernceListPCM/savePdf', {
             method: 'POST',
             body: formData
         });
 
-        if (response.ok) {
-            return;
-        } else {
+        if (!response.ok) {
             throw new Error('Failed to store PDF');
         }
-
     } catch (error) {
         console.error('Error:', error);
         alert('Error saving PDF: ' + error.message);
     }
 }
+
 
 // Helper function to convert Blob to Base64
 function blobToBase64(blob) {
@@ -777,8 +770,7 @@ function blobToBase64(blob) {
     });
 }
 
-function printPdf(){
-
+function printPdf() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'landscape',
@@ -786,10 +778,9 @@ function printPdf(){
         format: 'a4'
     });
 
-    
     // Add student info
     doc.setFontSize(20);
-    doc.text('HB Educational Firm', 14, 20);
+    doc.text('HB Educational Firm', 14, 20); //HB Educational Firm
     doc.setFontSize(12);
     doc.text(`Name: ${central_object.name}`, 14, 30);
     doc.text(`General Rank: ${central_object.formData.generalRank}`, 14, 36);
@@ -797,36 +788,53 @@ function printPdf(){
     doc.text(`Gender: ${central_object.formData.gender}`, 14, 48);
     doc.text(`Home University: ${central_object.formData.homeuniversity}`, 14, 54);
     doc.text(`Caste: ${central_object.formData.caste}`, 14, 60);
-    if(central_object.formData.tfws){
-        doc.text('TFWS: Yes', 14, 66);
-    }else{
-         doc.text('TFWS: No', 14, 66);
-    }
+
+    // Format branch category
+    const branch_cat_obj = {
+        All: 'All',
+        CIVIL: 'Civil',
+        COMP: 'Computer Science',
+        IT: 'Information Technology',
+        COMPAI: 'CSE (Artificial Intelligence)',
+        AI: 'Artificial Intelligence',
+        ELECTRICAL: 'Electrical',
+        ENTC: 'ENTC',
+        MECH: 'Mechanical',
+        OTHER: 'Other'
+    };
+
+    const branch_categories = central_object.formData.branchCategories
+        .map(el => branch_cat_obj[el] || el)
+        .join(", ");
+
+    const wrappedBranchText = doc.splitTextToSize(`Branch Category: ${branch_categories}`, 270);
+    let currentY = 66;
+    doc.text(wrappedBranchText, 14, currentY);
+    currentY += wrappedBranchText.length * 6; // adjust Y for next section
+
+    // Format city list
+    const cityString = central_object.formData.city.join(", ") + ".";
+    const wrappedCityText = doc.splitTextToSize(`City: ${cityString}`, 270);
+    doc.text(wrappedCityText, 14, currentY);
+    currentY += wrappedCityText.length * 6;
+
+    // TFWS
+    const tfwsText = central_object.formData.tfws ? 'TFWS: Yes' : 'TFWS: No';
+    doc.text(tfwsText, 14, currentY);
+    currentY += 10; // padding before table
+
+    // Extract table
+    const table = document.getElementById('pdfTable');
+    const headers = Array.from(table.querySelectorAll('th')).map(th => th.textContent);
+    const rows = Array.from(table.querySelectorAll('tr')).map(tr =>
+        Array.from(tr.querySelectorAll('td')).map(td => td.textContent)
+    ).filter(row => row.length);
 
     // Add table
-    const table = document.getElementById('pdfTable');
-    const rows = [];
-    
-    // Get table headers
-    const headers = [];
-    table.querySelectorAll('th').forEach(th => {
-        headers.push(th.textContent);
-    });
-    
-    // Get table rows
-    table.querySelectorAll('tr').forEach(tr => {
-        const row = [];
-        tr.querySelectorAll('td').forEach(td => {
-            row.push(td.textContent);
-        });
-        if (row.length) rows.push(row);
-    });
-
-    // Add table to PDF
     doc.autoTable({
         head: [headers],
         body: rows,
-        startY: 70,
+        startY: currentY,
         styles: {
             fontSize: 8,
             cellPadding: 3,

@@ -21,6 +21,7 @@ app.set('views',path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.json());
 connectDB();
+
 const port = process.env.PORT
 const {User} = require('./database/schema');
 
@@ -34,6 +35,10 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.get('/',isLoggedIn, async(req,res)=>{
   res.redirect('/afterLoginPage');
 });
+
+app.get('/collegeList', (req, res)=>{
+  res.redirect('https://sell-college-list.onrender.com/vipulPh/150')
+})
 
 // register and login
 const registerRoutes = require('./routes/registerroute'); 
@@ -132,6 +137,11 @@ app.use('/adminPanel',adminPanelRoutes);
 // profile
 const profileRoutes = require('./routes/profileroute'); 
 app.use('/profile',profileRoutes);
+
+// paymentPagePCM
+const paymentPagePCMRoutes = require('./routes/paymentPagePCMroute'); 
+app.use('/paymentPagePCM',paymentPagePCMRoutes);
+
 
 app.listen(port,()=>{
     console.log('server listing at port 8080');
