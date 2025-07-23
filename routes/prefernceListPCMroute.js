@@ -1176,27 +1176,59 @@ router.post('/College_list', async (req, res) => {
     try {
 
         new_data_of_student.selected_branches_code = await getSelectedBranchCode(formData.selected_branches);
-        calculateRankRange(formData);
-
+        
         getCasteColumns(formData.caste, formData.gender);
         if (formData.specialReservation != 'No') {
             new_data_of_student.specialReservation = formData.specialReservation;
         }
 
-        let colleges = await getColleges(formData);
-        colleges.sort((a, b) => b.choice_points - a.choice_points);
-        let college_counts;
-        if(req.session.user.promoCode != ''){
-            college_counts = 150;
+        new_data_of_student.minRank = 0;
+        new_data_of_student.maxRank = formData.generalRank;
+        new_data_of_student.allMinRank = 0;
+        new_data_of_student.allMaxRank = formData.allIndiaRank;
+
+        let colleges_1 = await getColleges(formData);
+        colleges_1.sort((a, b) => a.choice_points - b.choice_points);
+
+        new_data_of_student.minRank = formData.generalRank;
+        new_data_of_student.maxRank = 200000;
+        new_data_of_student.allMinRank = formData.allIndiaRank;
+        new_data_of_student.allMaxRank = 200000;
+
+        let colleges_2 = await getColleges(formData);
+        colleges_2.sort((a, b) => b.choice_points - a.choice_points);
+
+
+        let college_counts = 200;
+
+        let college_counts_2;
+        let college_counts_1;
+        if(colleges_1.length < (college_counts / 2) && colleges_2.length > (college_counts / 2)){
+            college_counts_2 = college_counts - colleges_1.length;
+            colleges_2 = colleges_2.slice(0,college_counts_2);
+        }else if(colleges_1.length > (college_counts / 2) && colleges_2.length < (college_counts / 2)){
+            college_counts_1 = college_counts - colleges_2.length;
+            colleges_1 = colleges_1.slice(0,college_counts_1);
+        }else if(colleges_1.length < (college_counts / 2) && colleges_2.length < (college_counts / 2)){
+            colleges_2 = colleges_2;
+            colleges_1 = colleges_1;
         }else{
-            if(req.session.user.payment == '75'){
-                college_counts = 75;
-            }else{
-                college_counts = 150;
-            }
+            college_counts /= 2;
+            colleges_2 = colleges_2.slice(0,college_counts);
+            colleges_1 = colleges_1.slice(0,college_counts);
         }
 
-        colleges = colleges.slice(0,college_counts);
+
+        // if(req.session.user.promoCode != ''){
+        //     college_counts = 150;
+        // }else{
+        //     if(req.session.user.payment == '75'){
+        //         college_counts = 75;
+        //     }else{
+        //         college_counts = 150;
+        //     }
+        // }
+        let colleges = [...colleges_1, ...colleges_2];
         colleges.sort((a, b) => b.choice_points - a.choice_points);
         // console.log(colleges);
         res.json(colleges);

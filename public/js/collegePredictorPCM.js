@@ -412,7 +412,7 @@ async function fetchUniversity() {
 
 // Add this at the bottom of your collegePredictorPCM.js file
 
-document.getElementById('downloadPdf').addEventListener('click', generatePdf);
+// document.getElementById('downloadPdf').addEventListener('click', generatePdf);
 
 
 function generatePdf() {

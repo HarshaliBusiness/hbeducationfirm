@@ -971,7 +971,6 @@ function college_filter_by_branch_category(colleges, branch_cat){
     return colleges.filter(element => element.branch_name == branch_cat);
 }
 
-
 router.post('/College_list', async(req,res)=>{
     const formData = req.body;
     // console.log(formData);

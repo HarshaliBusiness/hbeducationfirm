@@ -750,6 +750,7 @@ async function savepdfintodatabase(isVerified) {
         if (!response.ok) {
             throw new Error('Failed to store PDF');
         }
+        
     } catch (error) {
         console.error('Error:', error);
         alert('Error saving PDF: ' + error.message);
