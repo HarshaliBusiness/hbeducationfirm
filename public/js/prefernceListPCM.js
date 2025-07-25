@@ -672,10 +672,10 @@ function generatePdfList() {
         if(central_object.formData.caste != 'OPEN' && central_object.formData.caste != 'EWS'){
             if(central_object.formData.gender == 'Female'){
                 let caste = `l${central_object.formData.caste}`;
-                rowContent += `<td>${college[caste]}</td>`;
+                rowContent += `<td>${college[caste.toLowerCase()]}</td>`;
             }else{
                 let caste = `g${central_object.formData.caste}`;
-                rowContent += `<td>${college[caste]}</td>`;
+                rowContent += `<td>${college[caste.toLowerCase()]}</td>`;
             }
         }
 

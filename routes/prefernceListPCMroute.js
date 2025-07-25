@@ -1199,7 +1199,7 @@ router.post('/College_list', async (req, res) => {
         colleges_2.sort((a, b) => b.choice_points - a.choice_points);
 
 
-        let college_counts = 200;
+        let college_counts = 300;
 
         let college_counts_2;
         let college_counts_1;
