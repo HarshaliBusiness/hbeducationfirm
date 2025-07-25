@@ -613,46 +613,80 @@ function updateSelectedCount(count) {
 }
 
 function generatePdfList() {
-    // const selectedColleges = document.querySelectorAll('.college-card.selected');
-    // if (selectedColleges.length === 0) {
-    //     alert('Please select at least one college');
-    //     return;
-    // }
-
     const pdfTableBody = document.getElementById('pdfTableBody');
+    const pdfHead = document.getElementById('pdfHead');
+
+    let pdfHeadContent = `<tr>  
+                        <th>No.</th>
+                        <th>Choice code</th>
+                        <th>College Name</th>
+                        <th>Branch</th>
+                        <th>GOPEN</th>
+                        <th>AI</th>`;
+    
+    if(central_object.formData.gender == 'Female' && central_object.formData.caste == 'OPEN'){
+        pdfHeadContent+= '<th>LOPEN</th>';
+    }
+    
+    if(central_object.formData.caste == 'EWS'){
+        pdfHeadContent+= '<th>EWS</th>';
+    }
+    
+    if(central_object.formData.caste != 'OPEN' && central_object.formData.caste != 'EWS'){
+        if(central_object.formData.gender == 'Female'){
+            pdfHeadContent+= `<th>L${central_object.formData.caste}</th>`;
+        }else{
+            pdfHeadContent+= `<th>G${central_object.formData.caste}</th>`;
+        }
+    }
+
+    if(central_object.formData.tfws) {
+        pdfHeadContent += '<th>TFWS</th>';
+    }
+
+    pdfHeadContent += '</tr>'; 
+    pdfHead.innerHTML = pdfHeadContent;
+   
     pdfTableBody.innerHTML = '';
     let index = 1;
+    
     central_object.final_college_list.forEach((college) => {
-
-        if(central_object.formData.tfws){
-            const row_1 = document.createElement('tr');
-            row_1.innerHTML = `
-                <td>${index}</td>
-                <td>${college.choice_code}T</td>
-                <td>${college.college_name}</td>
-                <td>${college.branch_name}</td>
-                <td>${college.university}</td>
-                <td>${college.seat_type}</td>
-            `;
-            index++;
-            pdfTableBody.appendChild(row_1);
-        }
-
         const row = document.createElement('tr');
-        row.innerHTML = `
+        let rowContent = `
             <td>${index}</td>
             <td>${college.choice_code}</td>
             <td>${college.college_name}</td>
             <td>${college.branch_name}</td>
-            <td>${college.university}</td>
-            <td>${college.seat_type}</td>
+            <td>${college.gopen}</td>
+            <td>${college.all_india}</td>
         `;
+        
+        if(central_object.formData.gender == 'Female' && central_object.formData.caste == 'OPEN'){
+            rowContent += `<td>${college.lopen}</td>`;
+        }
+        
+        if(central_object.formData.caste == 'EWS'){
+            rowContent += `<td>${college.ews}</td>`;
+        }
+        
+        if(central_object.formData.caste != 'OPEN' && central_object.formData.caste != 'EWS'){
+            if(central_object.formData.gender == 'Female'){
+                let caste = `l${central_object.formData.caste}`;
+                rowContent += `<td>${college[caste]}</td>`;
+            }else{
+                let caste = `g${central_object.formData.caste}`;
+                rowContent += `<td>${college[caste]}</td>`;
+            }
+        }
+
+        if(central_object.formData.tfws) {
+            rowContent += `<td>${college.tfws}</td>`;
+        }
+
+        row.innerHTML = rowContent;
         index++;
         pdfTableBody.appendChild(row);
-        
-        
     });
-    
 }
 
 async function savepdfintodatabase(isVerified) {
